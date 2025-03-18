@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>プロジェクトナビゲーター - AIアシスタント</title>
+  <!-- Material UI と React のCDN -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <script src="https://unpkg.com/@material-ui/core@4.12.4/umd/material-ui.production.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background-color: #f5f5f5;
+    }
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .main-content {
+      flex: 1;
+      padding: 24px;
+      margin-top: 64px;
+      margin-left: 240px;
+      display: flex;
+    }
+    .app-bar {
+      background-color: #fff !important;
+      color: #333 !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12) !important;
+      position: fixed !important;
+      z-index: 1201 !important;
+    }
+    .drawer {
+      width: 240px;
+      flex-shrink: 0;
+    }
+    .drawer-paper {
+      width: 240px;
+      box-sizing: border-box;
+      border-right: none !important;
+      background-color: #1976d2 !important;
+      color: white !important;
+    }
+    .drawer-item {
+      color: rgba(255, 255, 255, 0.7) !important;
+    }
+    .drawer-item.active {
+      background-color: rgba(255, 255, 255, 0.14) !important;
+      color: white !important;
+    }
+    .drawer-icon {
+      color: rgba(255, 255, 255, 0.7) !important;
+    }
+    .active .drawer-icon {
+      color: white !important;
+    }
+    .chat-column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      max-width: 600px;
+      min-width: 320px;
+    }
+    .gantt-column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding-left: 24px;
+      overflow-x: auto;
+    }
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    .chat-header {
+      padding: 16px;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      align-items: center;
+    }
+    .chat-icon {
+      margin-right: 12px;
+      color: #1976d2;
+    }
+    .chat-messages {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      max-height: calc(100vh - 240px);
+    }
+    .message {
+      margin-bottom: 24px;
+      display: flex;
+    }
+    .message.ai {
+      flex-direction: row;
+    }
+    .message.user {
+      flex-direction: row-reverse;
+    }
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+      flex-shrink: 0;
+    }
+    .message.user .avatar {
+      margin-left: 12px;
+      margin-right: 0;
+    }
+    .ai .avatar {
+      background-color: #e3f2fd;
+      color: #1976d2;
+    }
+    .user .avatar {
+      background-color: #e0e0e0;
+      color: #616161;
+    }
+    .message-content {
+      max-width: 80%;
+      padding: 12px 16px;
+      border-radius: 18px;
+      position: relative;
+    }
+    .ai .message-content {
+      background-color: #f5f5f5;
+      border-top-left-radius: 4px;
+    }
+    .user .message-content {
+      background-color: #e3f2fd;
+      border-top-right-radius: 4px;
+      text-align: right;
+    }
+    .chat-input-container {
+      padding: 16px;
+      border-top: 1px solid #f0f0f0;
+      display: flex;
+    }
+    .chat-input {
+      flex: 1;
+      border-radius: 24px;
+      padding: 12px 48px 12px 16px;
+      border: 1px solid #e0e0e0;
+      outline: none;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+    .chat-input:focus {
+      border-color: #2196f3;
+    }
+    .send-button {
+      margin-left: 8px !important;
+      min-width: unset !important;
+      width: 40px;
+      height: 40px;
+      border-radius: 50% !important;
+      padding: 0 !important;
+    }
+    .quick-replies {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .quick-reply {
+      border-radius: 18px !important;
+      text-transform: none !important;
+    }
+    .gantt-container {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .gantt-header {
+      padding: 16px;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .gantt-chart {
+      padding: 16px;
+      overflow-x: auto;
+      flex: 1;
+    }
+    .gantt-row {
+      display: flex;
+      height: 56px;
+      margin-bottom: 8px;
+      border-bottom: 1px solid #f5f5f5;
+      padding-bottom: 8px;
+    }
+    .gantt-task {
+      flex: 1;
+      display: flex;
+      align-items: center;
+    }
+    .task-priority {
+      width: 4px;
+      height: 40px;
+      margin-right: 12px;
+      border-radius: 2px;
+    }
+    .task-priority.high {
+      background-color: #f44336;
+    }
+    .task-priority.medium {
+      background-color: #ff9800;
+    }
+    .task-priority.low {
+      background-color: #4caf50;
+    }
+    .task-details {
+      flex: 1;
+      min-width: 200px;
+    }
+    .task-title {
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+    }
+    .task-warning {
+      color: #ff9800;
+      margin-left: 8px;
+    }
+    .task-dates {
+      font-size: 12px;
+      color: #757575;
+      margin-top: 4px;
+    }
+    .gantt-timeline {
+      flex: 2;
+      position: relative;
+      margin-left: 24px;
+      min-width: 400px;
+      background: linear-gradient(to right, #f5f5f5 1px, transparent 1px);
+      background-size: 40px 100%;
+    }
+    .timeline-now {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background-color: #f44336;
+      z-index: 1;
+    }
+    .timeline-months {
+      display: flex;
+      height: 24px;
+      font-size: 12px;
+      color: #757575;
+      border-bottom: 1px solid #e0e0e0;
+      margin-bottom: 8px;
+    }
+    .timeline-month {
+      flex: 1;
+      text-align: center;
+      min-width: 80px;
+    }
+    .timeline-bar {
+      position: absolute;
+      height: 32px;
+      border-radius: 4px;
+      top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .timeline-bar:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .timeline-bar.high {
+      background-color: #f44336;
+    }
+    .timeline-bar.medium {
+      background-color: #ff9800;
+    }
+    .timeline-bar.low {
+      background-color: #4caf50;
+    }
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+      color: #9e9e9e;
+      text-align: center;
+    }
+    .empty-icon {
+      font-size: 48px !important;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+    .task-list {
+      flex: 1;
+      overflow-y: auto;
+    }
+    .task-approval-section {
+      padding: 16px;
+      background-color: #e8f5e9;
+      border-radius: 8px;
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .task-approval-buttons {
+      display: flex;
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .task-list-approved {
+      margin-top: 16px;
+      background-color: #f5f5f5;
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .task-item {
+      display: flex;
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .task-checkbox {
+      margin-right: 12px;
+    }
+    .typing-indicator {
+      display: flex;
+      align-items: center;
+      margin-top: 8px;
+    }
+    .typing-dot {
+      width: 8px;
+      height: 8px;
+      background-color: #bdbdbd;
+      border-radius: 50%;
+      margin-right: 4px;
+      animation: typing-animation 1.5s infinite ease-in-out;
+    }
+    .typing-dot:nth-child(1) {
+      animation-delay: 0s;
+    }
+    .typing-dot:nth-child(2) {
+      animation-delay: 0.3s;
+    }
+    .typing-dot:nth-child(3) {
+      animation-delay: 0.6s;
+    }
+    @keyframes typing-animation {
+      0%, 60%, 100% {
+        transform: translateY(0);
+        opacity: 0.6;
+      }
+      30% {
+        transform: translateY(-4px);
+        opacity: 1;
+      }
+    }
+    .mode-switch {
+      display: flex;
+      margin-bottom: 16px;
+    }
+    .task-actions {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+    }
+    @media (max-width: 960px) {
+      .main-content {
+        margin-left: 0;
+        padding: 16px;
+        flex-direction: column;
+      }
+      .gantt-column {
+        padding-left: 0;
+        margin-top: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const {
+      AppBar, Toolbar, IconButton, Typography, Drawer, List, ListItem, ListItemIcon, ListItemText,
+      Divider, Button, TextField, Tabs, Tab, Box, Paper, Checkbox, CircularProgress, Chip,
+      Dialog, DialogTitle, DialogContent, DialogActions, Menu, MenuItem, Tooltip
+    } = MaterialUI;
+
+    function AIProjectPlanner() {
+      const [mobileOpen, setMobileOpen] = React.useState(false);
+      const [messages, setMessages] = React.useState([]);
+      const [input, setInput] = React.useState('');
+      const [isTyping, setIsTyping] = React.useState(false);
+      const [quickReplies, setQuickReplies] = React.useState([]);
+      const [tasks, setTasks] = React.useState([]);
+      const [showApprovalSection, setShowApprovalSection] = React.useState(false);
+      const [tasksApproved, setTasksApproved] = React.useState(false);
+      const [activeTab, setActiveTab] = React.useState(0);
+      
+      const messagesEndRef = React.useRef(null);
+
+      // チャット履歴を最下部にスクロール
+      React.useEffect(() => {
+        if (messagesEndRef.current) {
+          messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, [messages]);
+
+      // 初期メッセージを表示
+      React.useEffect(() => {
+        setTimeout(() => {
+          addMessage('ai', 'こんにちは！プロジェクトナビゲーターへようこそ。\n\n新しいプロジェクト計画を一緒に作成しましょう。どのようなプロジェクトを計画していますか？');
+          setQuickReplies([
+            { text: '新店舗の出店', value: 'store-opening' },
+            { text: '新商品の開発', value: 'product-launch' },
+            { text: '会社設立', value: 'company-establishment' },
+            { text: 'イベント開催', value: 'event-planning' }
+          ]);
+        }, 1000);
+      }, []);
+
+      const handleDrawerToggle = () => {
+        setMobileOpen(!mobileOpen);
+      };
+
+      const addMessage = (sender, content) => {
+        setMessages(prevMessages => [...prevMessages, { sender, content }]);
+      };
+
+      const handleSendMessage = () => {
+        if (input.trim() === '') return;
+        
+        // ユーザーメッセージを追加
+        addMessage('user', input);
+        setInput('');
+        setQuickReplies([]);
+        
+        // AIの返信をシミュレート
+        setIsTyping(true);
+        
+        setTimeout(() => {
+          setIsTyping(false);
+          
+          // 会話の流れに応じて返信内容を変更
+          if (messages.length === 1) {
+            // プロジェクトタイプ選択後
+            addMessage('ai', `新店舗の出店計画ですね。計画を作成するために、もう少し詳細を教えていただけますか？\n\n• 目標オープン日はいつですか？\n• どのエリアでの出店を検討していますか？\n• 予算規模はどのくらいでしょうか？`);
+            setQuickReplies([
+              { text: '8月に新宿でオープン予定', value: 'tokyo-august' },
+              { text: '年内に大阪で出店希望', value: 'osaka-december' },
+              { text: '詳細を個別に入力する', value: 'custom-input' }
+            ]);
+          } 
+          else if (messages.length === 3) {
+            // 詳細情報入力後
+            addMessage('ai', `8月に新宿でオープン予定ですね。了解しました。\n\n新店舗オープンに向けて、以下のようなタスクが必要になるでしょう。タスクリストを生成しています...`);
+            
+            // タスク生成を遅延表示
+            setTimeout(() => {
+              const generatedTasks = [
+                {
+                  id: 1,
+                  title: '市場調査と競合分析',
+                  description: '新宿エリアの競合店舗、客層、需要予測などの調査',
+                  startDate: '2023-05-01',
+                  endDate: '2023-05-15',
+                  priority: 'high',
+                  status: 'not-started',
+                  warning: false
+                },
+                {
+                  id: 2,
+                  title: '物件選定と契約',
+                  description: '出店場所の選定、内見、賃貸契約の締結',
+                  startDate: '2023-05-10',
+                  endDate: '2023-06-10',
+                  priority: 'high',
+                  status: 'not-started',
+                  warning: true,
+                  warningText: '繁華街の物件は競争が激しいため、早めに動き出す必要があります。契約から工事開始まで通常2週間程度かかります。'
+                },
+                {
+                  id: 3,
+                  title: '店舗デザインと内装プラン作成',
+                  description: '店舗コンセプトに合わせた内装デザインと設備計画',
+                  startDate: '2023-06-01',
+                  endDate: '2023-06-20',
+                  priority: 'medium',
+                  status: 'not-started',
+                  warning: false
+                },
+                {
+                  id: 4,
+                  title: '各種許認可申請',
+                  description: '飲食店営業許可、酒類提供免許などの申請',
+                  startDate: '2023-06-15',
+                  endDate: '2023-07-15',
+                  priority: 'high',
+                  status: 'not-started',
+                  warning: true,
+                  warningText: '飲食店営業許可は申請から取得まで通常1ヶ月程度かかります。酒類提供免許はさらに時間がかかる場合があります。'
+                },
+                {
+                  id: 5,
+                  title: '内装工事',
+                  description: '内装工事、設備設置、看板設置など',
+                  startDate: '2023-06-25',
+                  endDate: '2023-07-25',
+                  priority: 'high',
+                  status: 'not-started',
+                  warning: false
+                },
+                {
+                  id: 6,
+                  title: 'スタッフ募集と採用',
+                  description: '求人掲載、面接、採用手続き',
+                  startDate: '2023-07-01',
+                  endDate: '2023-07-20',
+                  priority: 'medium',
+                  status: 'not-started',
+                  warning: false
+                },
+                {
+                  id: 7,
+                  title: 'スタッフ研修',
+                  description: 'サービスマニュアルの作成、調理研修、接客研修',
+                  startDate: '2023-07-21',
+                  endDate: '2023-08-05',
+                  priority: 'medium',
+                  status: 'not-started',
+                  warning: false
+                },
+                {
+                  id: 8,
+                  title: 'プレオープン準備と実施',
+                  description: '招待客向けのプレオープンイベント実施',
+                  startDate: '2023-08-06',
+                  endDate: '2023-08-12',
+                  priority: 'low',
+                  status: 'not-started',
+                  warning: false
+                },
+                {
+                  id: 9,
+                  title: 'グランドオープン',
+                  description: '一般営業開始とオープニングイベント',
+                  startDate: '2023-08-15',
+                  endDate: '2023-08-15',
+                  priority: 'high',
+                  status: 'not-started',
+                  warning: false
+                }
+              ];
+              
+              setTasks(generatedTasks);
+              addMessage('ai', `新宿での出店に必要なタスクリストを作成しました。8月のオープンに向けて逆算して計画しています。\n\n特に注意が必要なポイントとして、物件契約と許認可申請は時間がかかる工程です。これらを早めに進めることでリスクを軽減できます。\n\nこのタスクリストでよろしければ承認してください。変更が必要な箇所があれば教えてください。`);
+              setShowApprovalSection(true);
+            }, 2000);
+          }
+          else if (messages.length === 5 && messages[4].content === 'タスクリストを承認します') {
+            // タスク承認後
+            addMessage('ai', `タスクリストを承認いただきありがとうございます。これでプロジェクト計画が確定しました。\n\n右側のガントチャートで全体のスケジュールを確認できます。各タスクはドラッグして期間を調整することも可能です。\n\n特に重要なマイルストーンは以下の通りです：\n• 6月10日までに物件契約を完了\n• 7月15日までに許認可申請を完了\n• 8月15日のグランドオープン\n\n進捗状況を随時更新していきましょう。何か質問や変更があればいつでもお声がけください。`);
+            setTasksApproved(true);
+          }
+          else if (messages.length === 5 && messages[4].content.includes('タスクを調整')) {
+            // タスク調整希望
+            addMessage('ai', `タスクの調整ですね。どのような変更を加えたいですか？\n\n• 特定のタスクの日程を変更\n• 新しいタスクを追加\n• タスクの優先度を変更\n\n具体的にお知らせいただければ、計画を調整します。`);
+            setQuickReplies([
+              { text: '物件契約の期間を長くしたい', value: 'extend-property' },
+              { text: '広告宣伝のタスクを追加したい', value: 'add-marketing' },
+              { text: 'オープン日を9月に延期したい', value: 'postpone-opening' }
+            ]);
+          }
+          else {
+            // その他の会話
+            addMessage('ai', `ご質問ありがとうございます。プロジェクト計画について何かお手伝いできることがあれば、お気軽にお尋ねください。\n\n進捗状況の更新や、タスクの追加・変更も可能です。`);
+          }
+        }, 1500);
+      };
+
+      const handleQuickReply = (reply) => {
+        setInput(reply.text);
+        handleSendMessage();
+      };
+
+      const handleTaskApproval = () => {
+        setInput('タスクリストを承認します');
+        handleSendMessage();
+      };
+
+      const handleTaskAdjustment = () => {
+        setInput('タスクを調整したいです');
+        handleSendMessage();
+      };
+
+      const handleTabChange = (event, newValue) => {
+        setActiveTab(newValue);
+      };
+
+      const formatDate = (dateString) => {
+        return new Date(dateString).toLocaleDateString('ja-JP', {
+          month: 'short',
+          day: 'numeric'
+        });
+      };
+
+      // タイムラインの位置計算
+      const calculateTimelinePosition = (task) => {
+        // プロジェクト期間（5月1日〜8月31日として計算）
+        const projectStart = new Date('2023-05-01');
+        const projectEnd = new Date('2023-08-31');
+        const totalDays = (projectEnd - projectStart) / (1000 * 60 * 60 * 24);
+        
+        const taskStart = new Date(task.startDate);
+        const taskEnd = new Date(task.endDate);
+        
+        const startOffset = Math.max(0, (taskStart - projectStart) / (1000 * 60 * 60 * 24));
+        const duration = Math.max(1, (taskEnd - taskStart) / (1000 * 60 * 60 * 24) + 1);
+        
+        const left = (startOffset / totalDays) * 100;
+        const width = (duration / totalDays) * 100;
+        
+        return {
+          left: `${left}%`,
+          width: `${width}%`
+        };
+      };
+
+      return (
+        <div className="app-container">
+          {/* アプリバー */}
+          <AppBar position="fixed" className="app-bar">
+            <Toolbar>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={handleDrawerToggle}
+                sx={{ mr: 2, display: { md: 'none' } }}
+              >
+                <span className="material-icons">menu</span>
+              </IconButton>
+              
+              <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+                プロジェクトナビゲーター
+              </Typography>
+              
+              <IconButton color="inherit">
+                <span className="material-icons">help_outline</span>
+              </IconButton>
+            </Toolbar>
+          </AppBar>
+          
+          {/* サイドナビゲーション */}
+          <nav>
+            <Drawer
+              variant="temporary"
+              open={mobileOpen}
+              onClose={handleDrawerToggle}
+              className="drawer"
+              classes={{ paper: "drawer-paper" }}
+              ModalProps={{ keepMounted: true }}
+              sx={{ display: { xs: 'block', md: 'none' } }}
+            >
+              <Toolbar>
+                <Typography variant="h6" noWrap>
+                  プロジェクトナビ
+                </Typography>
+              </Toolbar>
+              <Divider />
+              <List>
+                <ListItem button className="drawer-item">
+                  <ListItemIcon>
+                    <span className="material-icons drawer-icon">dashboard</span>
+                  </ListItemIcon>
+                  <ListItemText primary="ダッシュボード" />
+                </ListItem>
+                <ListItem button className="drawer-item active">
+                  <ListItemIcon>
+                    <span className="material-icons drawer-icon">chat</span>
+                  </ListItemIcon>
+                  <ListItemText primary="AIアシスタント" />
+                </ListItem>
+                <ListItem button className="drawer-item">
+                  <ListItemIcon>
+                    <span className="material-icons drawer-icon">event_note</span>
+                  </ListItemIcon>
+                  <ListItemText primary="マイプロジェクト" />
+                </ListItem>
+                <ListItem button className="drawer-item">
+                  <ListItemIcon>
+                    <span className="material-icons drawer-icon">task_alt</span>
+                  </ListItemIcon>
+                  <ListItemText primary="タスク管理" />
+                </ListItem>
+              </List>
+            </Drawer>
+            
+            <Drawer
+              variant="permanent"
+              className="drawer"
+              classes={{ paper: "drawer-paper" }}
+              sx={{ display: { xs: 'none', md: 'block' } }}
+            >
+              <Toolbar>
+                <Typography variant="h6" noWrap>
+                  プロジェクトナビ
+                </Typography>
+              </Toolbar>
+              <Divider />
+              <List>
+                <ListItem button className="drawer-item">
+                  <ListItemIcon>
+                    <span className="material-icons drawer-icon">dashboard</span>
+                  </ListItemIcon>
+                  <ListItemText primary="ダッシュボード" />
+                </ListItem>
+                <ListItem button className="drawer-item active">
+                  <ListItemIcon>
+                    <span className="material-icons drawer-icon">chat</span>
+                  </ListItemIcon>
+                  <ListItemText primary="AIアシスタント" />
+                </ListItem>
+                <ListItem button className="drawer-item">
+                  <ListItemIcon>
+                    <span className="material-icons drawer-icon">event_note</span>
+                  </ListItemIcon>
+                  <ListItemText primary="マイプロジェクト" />
+                </ListItem>
+                <ListItem button className="drawer-item">
+                  <ListItemIcon>
+                    <span className="material-icons drawer-icon">task_alt</span>
+                  </ListItemIcon>
+                  <ListItemText primary="タスク管理" />
+                </ListItem>
+              </List>
+            </Drawer>
+          </nav>
+          
+          {/* メインコンテンツ */}
+          <main className="main-content">
+            {/* チャットカラム */}
+            <div className="chat-column">
+              <div className="chat-container">
+                <div className="chat-header">
+                  <span className="material-icons chat-icon">smart_toy</span>
+                  <Typography variant="h6">AIアシスタント</Typography>
+                </div>
+                
+                <div className="chat-messages">
+                  {messages.map((message, index) => (
+                    <div key={index} className={`message ${message.sender}`}>
+                      <div className="avatar">
+                        <span className="material-icons">
+                          {message.sender === 'ai' ? 'smart_toy' : 'person'}
+                        </span>
+                      </div>
+                      <div className="message-content">
+                        <Typography variant="body1" style={{ whiteSpace: 'pre-line' }}>
+                          {message.content}
+                        </Typography>
+                      </div>
+                    </div>
+                  ))}
+                  
+                  {/* 入力中表示 */}
+                  {isTyping && (
+                    <div className="message ai">
+                      <div className="avatar">
+                        <span className="material-icons">smart_toy</span>
+                      </div>
+                      <div className="typing-indicator">
+                        <div className="typing-dot"></div>
+                        <div className="typing-dot"></div>
+                        <div className="typing-dot"></div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* タスク承認セクション */}
+                  {showApprovalSection && !tasksApproved && (
+                    <div className="task-approval-section">
+                      <Typography variant="body1">
+                        計画された{tasks.length}個のタスクを確認しましたか？
+                      </Typography>
+                      <div className="task-approval-buttons">
+                        <Button
+                          variant="outlined"
+                          color="primary"
+                          onClick={handleTaskAdjustment}
+                        >
+                          タスクを調整する
+                        </Button>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={handleTaskApproval}
+                        >
+                          このまま承認する
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* 生成されたタスクリスト */}
+                  {tasks.length > 0 && !tasksApproved && (
+                    <div className="task-list-approved">
+                      <Typography variant="subtitle1" gutterBottom>
+                        生成されたタスク：
+                      </Typography>
+                      
+                      {tasks.map((task) => (
+                        <div key={task.id} className="task-item">
+                          <Checkbox
+                            className="task-checkbox"
+                            disabled
+                          />
+                          <div style={{ flex: 1 }}>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                              <Typography variant="body1">
+                                {task.title}
+                              </Typography>
+                              {task.warning && (
+                                <Tooltip title={task.warningText}>
+                                  <span className="material-icons" style={{ color: '#ff9800', marginLeft: 8, fontSize: 16 }}>
+                                    warning
+                                  </span>
+                                </Tooltip>
+                              )}
+                            </div>
+                            <Typography variant="caption" color="textSecondary">
+                              {formatDate(task.startDate)} 〜 {formatDate(task.endDate)}
+                            </Typography>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  
+                  <div ref={messagesEndRef} />
+                </div>
+                
+                {/* クイックリプライ */}
+                {quickReplies.length > 0 && (
+                  <div className="quick-replies">
+                    {quickReplies.map((reply, index) => (
+                      <Button
+                        key={index}
+                        variant="outlined"
+                        size="small"
+                        className="quick-reply"
+                        onClick={() => handleQuickReply(reply)}
+                      >
+                        {reply.text}
+                      </Button>
+                    ))}
+                  </div>
+                )}
+                
+                {/* チャット入力 */}
+                <div className="chat-input-container">
+                  <input
+                    type="text"
+                    className="chat-input"
+                    placeholder="メッセージを入力..."
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                  />
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    className="send-button"
+                    onClick={handleSendMessage}
+                    disabled={input.trim() === ''}
+                  >
+                    <span className="material-icons">send</span>
+                  </Button>
+                </div>
+              </div>
+            </div>
+            
+            {/* ガントチャートカラム */}
+            <div className="gantt-column">
+              <div className="gantt-container">
+                <div className="gantt-header">
+                  <Typography variant="h6">
+                    {tasksApproved ? 'プロジェクトタイムライン' : 'タスク計画プレビュー'}
+                  </Typography>
+                  
+                  {tasksApproved && (
+                    <div>
+                      <Button
+                        startIcon={<span className="material-icons">file_download</span>}
+                        color="primary"
+                      >
+                        エクスポート
+                      </Button>
+                    </div>
+                  )}
+                </div>
+                
+                {tasks.length > 0 ? (
+                  <div className="gantt-chart">
+                    <div className="timeline-months">
+                      <div className="timeline-month">5月</div>
+                      <div className="timeline-month">6月</div>
+                      <div className="timeline-month">7月</div>
+                      <div className="timeline-month">8月</div>
+                    </div>
+                    
+                    {/* 現在の日付を示す縦線 */}
+                    <div className="timeline-now" style={{ left: '20%' }}></div>
+                    
+                    {tasks.map((task) => (
+                      <div key={task.id} className="gantt-row">
+                        <div className="gantt-task">
+                          <div className={`task-priority ${task.priority}`}></div>
+                          <div className="task-details">
+                            <div className="task-title">
+                              {task.title}
+                              {task.warning && (
+                                <Tooltip title={task.warningText}>
+                                  <span className="material-icons task-warning">warning</span>
+                                </Tooltip>
+                              )}
+                            </div>
+                            <div className="task-dates">
+                              {formatDate(task.startDate)} 〜 {formatDate(task.endDate)}
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="gantt-timeline">
+                          <Tooltip title={task.description}>
+                            <div 
+                              className={`timeline-bar ${task.priority}`}
+                              style={calculateTimelinePosition(task)}
+                            >
+                              {task.title}
+                            </div>
+                          </Tooltip>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="empty-state">
+                    <span className="material-icons empty-icon">event_note</span>
+                    <Typography variant="subtitle1">
+                      タスクが作成されていません
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      AIアシスタントにプロジェクトについて伝えると、タスク計画が生成されます
+                    </Typography>
+                  </div>
+                )}
+              </div>
+            </div>
+          </main>
+        </div>
+      );
+    }
+
+    ReactDOM.render(<AIProjectPlanner />, document.getElementById('root'));
+  </script>
+</body>
+</html>

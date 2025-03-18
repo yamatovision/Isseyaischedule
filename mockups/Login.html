@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>プランナビ - ログイン</title>
+  <!-- Material UI CDN -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <!-- React & React DOM -->
+  <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+  <!-- Babel for JSX -->
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <!-- Material UI -->
+  <script src="https://unpkg.com/@material-ui/core@4.12.4/umd/material-ui.production.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background-color: #f5f5f5;
+    }
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .login-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      flex: 1;
+    }
+    .login-card {
+      max-width: 450px;
+      width: 100%;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      background-color: white;
+    }
+    .login-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: #1976d2;
+    }
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .login-divider {
+      margin: 1.5rem 0;
+      display: flex;
+      align-items: center;
+      color: rgba(0, 0, 0, 0.38);
+    }
+    .login-divider::before,
+    .login-divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    }
+    .login-divider span {
+      margin: 0 1rem;
+    }
+    .social-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .footer {
+      display: flex;
+      justify-content: center;
+      margin-top: 1.5rem;
+      gap: 1rem;
+    }
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(255, 255, 255, 0.8);
+      z-index: 1000;
+    }
+    .app-logo {
+      height: 70px;
+      margin-bottom: 1rem;
+    }
+    .invitation-note {
+      margin-top: 1rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: rgba(0, 0, 0, 0.6);
+    }
+    @media (max-width: 600px) {
+      .login-card {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const {
+      Button, TextField, CircularProgress, Checkbox, FormControlLabel,
+      Snackbar, Alert, Typography, Box, Container, Paper, Divider
+    } = MaterialUI;
+
+    function App() {
+      const [isLogin, setIsLogin] = React.useState(true);
+      const [loading, setLoading] = React.useState(false);
+      const [alert, setAlert] = React.useState({open: false, message: '', severity: 'info'});
+      const [loginData, setLoginData] = React.useState({
+        email: '',
+        password: '',
+        rememberMe: false,
+        invitationCode: ''
+      });
+
+      const handleChange = (e) => {
+        const { name, value, checked } = e.target;
+        setLoginData({
+          ...loginData,
+          [name]: name === 'rememberMe' ? checked : value
+        });
+      };
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        setLoading(true);
+        
+        // モック：APIリクエストのシミュレーション
+        setTimeout(() => {
+          setLoading(false);
+          if (loginData.email && loginData.password) {
+            // 成功メッセージ表示後、理想的にはリダイレクトする
+            setAlert({
+              open: true,
+              message: isLogin ? 'ログインに成功しました' : '登録が完了しました',
+              severity: 'success'
+            });
+            // 実際の実装ではここでページ遷移（ダッシュボード画面へ）
+            // window.location.href = '/dashboard';
+          } else {
+            setAlert({
+              open: true,
+              message: 'すべてのフィールドを入力してください',
+              severity: 'error'
+            });
+          }
+        }, 1500);
+      };
+
+      const handleSocialLogin = (provider) => {
+        setLoading(true);
+        
+        // モック：ソーシャルログイン
+        setTimeout(() => {
+          setLoading(false);
+          setAlert({
+            open: true,
+            message: `${provider}でログインします`,
+            severity: 'info'
+          });
+          // 実際の実装ではOAuth認証フローに進む
+        }, 1000);
+      };
+
+      const toggleAuthMode = () => {
+        setIsLogin(!isLogin);
+      };
+
+      return (
+        <div className="app-container">
+          {loading && (
+            <div className="loading-overlay">
+              <CircularProgress />
+            </div>
+          )}
+          
+          <Container className="login-container">
+            <Paper className="login-card" elevation={3}>
+              <Box className="login-title">
+                <img src="https://via.placeholder.com/150x70?text=プランナビ" alt="PlanNavi Logo" className="app-logo" />
+                <Typography variant="h5" component="h1">
+                  {isLogin ? 'ログイン' : '新規登録'}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  {isLogin 
+                    ? '経営管理ツールへログイン' 
+                    : '招待コードを使って新しいアカウントを作成'}
+                </Typography>
+              </Box>
+
+              <form className="login-form" onSubmit={handleSubmit}>
+                <TextField
+                  label="メールアドレス"
+                  variant="outlined"
+                  fullWidth
+                  name="email"
+                  type="email"
+                  value={loginData.email}
+                  onChange={handleChange}
+                  required
+                />
+                
+                <TextField
+                  label="パスワード"
+                  variant="outlined"
+                  fullWidth
+                  name="password"
+                  type="password"
+                  value={loginData.password}
+                  onChange={handleChange}
+                  required
+                />
+                
+                {!isLogin && (
+                  <TextField
+                    label="招待コード"
+                    variant="outlined"
+                    fullWidth
+                    name="invitationCode"
+                    value={loginData.invitationCode}
+                    onChange={handleChange}
+                    required
+                    helperText="管理者から提供された招待コードを入力してください"
+                  />
+                )}
+                
+                <Box display="flex" justifyContent="space-between" alignItems="center">
+                  <FormControlLabel
+                    control={
+                      <Checkbox 
+                        name="rememberMe" 
+                        checked={loginData.rememberMe}
+                        onChange={handleChange}
+                        color="primary"
+                      />
+                    }
+                    label="ログイン情報を保存"
+                  />
+                  
+                  {isLogin && (
+                    <Button color="primary">
+                      パスワードをお忘れですか？
+                    </Button>
+                  )}
+                </Box>
+                
+                <Button 
+                  type="submit" 
+                  variant="contained" 
+                  color="primary" 
+                  fullWidth
+                  size="large"
+                >
+                  {isLogin ? 'ログイン' : '登録する'}
+                </Button>
+              </form>
+              
+              <div className="login-divider">
+                <span>または</span>
+              </div>
+              
+              <div className="social-buttons">
+                <Button 
+                  variant="outlined" 
+                  fullWidth
+                  onClick={() => handleSocialLogin('Google')}
+                  startIcon={<span className="material-icons">email</span>}
+                >
+                  Googleでログイン
+                </Button>
+              </div>
+              
+              <Box className="footer">
+                <Typography variant="body2">
+                  {isLogin ? 'アカウントをお持ちでないですか？' : 'すでにアカウントをお持ちですか？'}
+                </Typography>
+                <Button color="primary" onClick={toggleAuthMode}>
+                  {isLogin ? '新規登録' : 'ログイン'}
+                </Button>
+              </Box>
+              
+              {!isLogin && (
+                <div className="invitation-note">
+                  <Typography variant="body2">
+                    ※ プランナビは招待制です。招待コードなしではご登録いただけません。
+                  </Typography>
+                </div>
+              )}
+            </Paper>
+          </Container>
+          
+          <Snackbar 
+            open={alert.open} 
+            autoHideDuration={6000} 
+            onClose={() => setAlert({...alert, open: false})}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          >
+            <Alert severity={alert.severity} onClose={() => setAlert({...alert, open: false})}>
+              {alert.message}
+            </Alert>
+          </Snackbar>
+        </div>
+      );
+    }
+
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
+</html>

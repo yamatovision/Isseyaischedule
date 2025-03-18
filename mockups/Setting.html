@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>プランナビ - 設定</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+      line-height: 1.6;
+    }
+    
+    header {
+      background-color: #fff;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+    }
+    
+    .toolbar {
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      height: 64px;
+    }
+    
+    .logo {
+      font-size: 20px;
+      font-weight: 500;
+      margin-left: 32px;
+    }
+    
+    .menu-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #333;
+    }
+    
+    .material-icons {
+      font-size: 24px;
+    }
+    
+    .sidebar {
+      width: 240px;
+      background-color: #1976d2;
+      color: white;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      overflow-y: auto;
+    }
+    
+    .sidebar-header {
+      padding: 0 16px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .nav-list {
+      list-style: none;
+      padding: 8px 0;
+    }
+    
+    .nav-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      cursor: pointer;
+    }
+    
+    .nav-item:hover {
+      background-color: rgba(255, 255, 255, 0.08);
+    }
+    
+    .nav-item.active {
+      background-color: rgba(255, 255, 255, 0.14);
+      color: white;
+    }
+    
+    .nav-icon {
+      margin-right: 16px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .main-content {
+      margin-left: 240px;
+      margin-top: 64px;
+      padding: 24px;
+    }
+    
+    .page-title {
+      font-size: 24px;
+      margin-bottom: 24px;
+      font-weight: 500;
+    }
+    
+    .card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    
+    .card-title {
+      font-size: 18px;
+      margin-bottom: 16px;
+      font-weight: 500;
+    }
+    
+    .form-group {
+      margin-bottom: 16px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+      font-family: inherit;
+    }
+    
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    
+    input[type="checkbox"] {
+      margin-right: 8px;
+    }
+    
+    .button {
+      background-color: #1976d2;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .button:hover {
+      background-color: #1565c0;
+    }
+    
+    .button-secondary {
+      background-color: transparent;
+      color: #1976d2;
+      border: 1px solid #1976d2;
+    }
+    
+    .button-secondary:hover {
+      background-color: rgba(25, 118, 210, 0.05);
+    }
+    
+    .button-danger {
+      background-color: #f44336;
+    }
+    
+    .button-danger:hover {
+      background-color: #d32f2f;
+    }
+    
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    
+    .divider {
+      height: 1px;
+      background-color: #eee;
+      margin: 16px 0;
+    }
+    
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 22px;
+    }
+    
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      border-radius: 22px;
+      transition: .4s;
+    }
+    
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 2px;
+      background-color: white;
+      border-radius: 50%;
+      transition: .4s;
+    }
+    
+    input:checked + .toggle-slider {
+      background-color: #1976d2;
+    }
+    
+    input:checked + .toggle-slider:before {
+      transform: translateX(20px);
+    }
+    
+    .toggle-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    
+    .toggle-label {
+      font-weight: 500;
+    }
+    
+    .tab-container {
+      margin-bottom: 24px;
+    }
+    
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .tab {
+      padding: 12px 16px;
+      cursor: pointer;
+      font-weight: 500;
+      color: #666;
+      position: relative;
+    }
+    
+    .tab.active {
+      color: #1976d2;
+    }
+    
+    .tab.active:after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background-color: #1976d2;
+    }
+    
+    .tab-content {
+      display: none;
+      padding: 16px 0;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background-color: #1976d2;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin-bottom: 16px;
+    }
+    
+    @media (max-width: 960px) {
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+      }
+      
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      
+      .main-content {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="toolbar">
+      <button class="menu-button" id="menu-toggle">
+        <span class="material-icons">menu</span>
+      </button>
+      <div class="logo">プランナビ</div>
+    </div>
+  </header>
+  
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">プランナビ</div>
+    </div>
+    <nav>
+      <ul class="nav-list">
+        <li>
+          <a href="#" class="nav-item">
+            <span class="material-icons nav-icon">dashboard</span>
+            ダッシュボード
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-item">
+            <span class="material-icons nav-icon">event_note</span>
+            マイプラン
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-item">
+            <span class="material-icons nav-icon">check_circle</span>
+            タスク
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-item active">
+            <span class="material-icons nav-icon">settings</span>
+            設定
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-item">
+            <span class="material-icons nav-icon">help_outline</span>
+            ヘルプ
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+  
+  <main class="main-content">
+    <h1 class="page-title">設定</h1>
+    
+    <div class="tab-container">
+      <div class="tabs">
+        <div class="tab active" data-tab="account">アカウント</div>
+        <div class="tab" data-tab="notifications">通知</div>
+        <div class="tab" data-tab="calendar">カレンダー連携</div>
+        <div class="tab" data-tab="export">エクスポート</div>
+      </div>
+      
+      <!-- アカウント設定タブ -->
+      <div class="tab-content active" id="account-tab">
+        <div class="card">
+          <h2 class="card-title">プロフィール設定</h2>
+          
+          <div style="display: flex; align-items: center; margin-bottom: 24px;">
+            <div class="avatar">S</div>
+            <div style="margin-left: 16px;">
+              <button class="button button-secondary">画像を変更</button>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="name">名前</label>
+            <input type="text" id="name" value="佐藤 太郎">
+          </div>
+          
+          <div class="form-group">
+            <label for="email">メールアドレス</label>
+            <input type="email" id="email" value="taro.sato@example.com">
+          </div>
+          
+          <div class="form-actions">
+            <button class="button">保存</button>
+          </div>
+        </div>
+        
+        <div class="card">
+          <h2 class="card-title">パスワード変更</h2>
+          
+          <div class="form-group">
+            <label for="current-password">現在のパスワード</label>
+            <input type="password" id="current-password">
+          </div>
+          
+          <div class="form-group">
+            <label for="new-password">新しいパスワード</label>
+            <input type="password" id="new-password">
+          </div>
+          
+          <div class="form-group">
+            <label for="confirm-password">パスワード確認</label>
+            <input type="password" id="confirm-password">
+          </div>
+          
+          <div class="form-actions">
+            <button class="button">パスワードを変更</button>
+          </div>
+        </div>
+        
+        <div class="card">
+          <h2 class="card-title">アカウント削除</h2>
+          <p>アカウントを削除すると、すべてのデータが永久に削除されます。この操作は元に戻せません。</p>
+          
+          <div class="form-actions">
+            <button class="button button-danger">アカウントを削除</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 通知設定タブ -->
+      <div class="tab-content" id="notifications-tab">
+        <div class="card">
+          <h2 class="card-title">通知設定</h2>
+          
+          <div class="toggle-container">
+            <span class="toggle-label">アプリ内通知</span>
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          
+          <div class="toggle-container">
+            <span class="toggle-label">メール通知</span>
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          
+          <div class="divider"></div>
+          
+          <h3 style="margin-bottom: 16px;">タスク通知</h3>
+          
+          <div class="form-group">
+            <label>リマインダー通知</label>
+            
+            <div class="checkbox-group">
+              <input type="checkbox" id="remind-1day" checked>
+              <label for="remind-1day" style="font-weight: normal;">期限の1日前</label>
+            </div>
+            
+            <div class="checkbox-group">
+              <input type="checkbox" id="remind-3days" checked>
+              <label for="remind-3days" style="font-weight: normal;">期限の3日前</label>
+            </div>
+            
+            <div class="checkbox-group">
+              <input type="checkbox" id="remind-1week">
+              <label for="remind-1week" style="font-weight: normal;">期限の1週間前</label>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="notification-time">通知時間</label>
+            <select id="notification-time">
+              <option value="9:00">9:00</option>
+              <option value="10:00" selected>10:00</option>
+              <option value="12:00">12:00</option>
+              <option value="15:00">15:00</option>
+              <option value="18:00">18:00</option>
+            </select>
+          </div>
+          
+          <div class="form-actions">
+            <button class="button">保存</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- カレンダー連携タブ -->
+      <div class="tab-content" id="calendar-tab">
+        <div class="card">
+          <h2 class="card-title">カレンダー連携</h2>
+          
+          <div class="toggle-container">
+            <span class="toggle-label">Googleカレンダーと連携</span>
+            <label class="toggle-switch">
+              <input type="checkbox">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          
+          <button class="button button-secondary" style="margin-bottom: 24px;">
+            <span class="material-icons" style="font-size: 18px; margin-right: 8px; vertical-align: middle;">add_circle</span>
+            カレンダーを接続
+          </button>
+          
+          <div class="divider"></div>
+          
+          <h3 style="margin-bottom: 16px;">連携設定</h3>
+          
+          <div class="form-group">
+            <label>同期するプラン</label>
+            
+            <div class="checkbox-group">
+              <input type="checkbox" id="sync-all" checked>
+              <label for="sync-all" style="font-weight: normal;">すべてのプラン</label>
+            </div>
+            
+            <div class="checkbox-group">
+              <input type="checkbox" id="sync-specific" disabled>
+              <label for="sync-specific" style="font-weight: normal;">特定のプランのみ</label>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label>同期内容</label>
+            
+            <div class="checkbox-group">
+              <input type="checkbox" id="sync-tasks" checked>
+              <label for="sync-tasks" style="font-weight: normal;">タスク期限</label>
+            </div>
+            
+            <div class="checkbox-group">
+              <input type="checkbox" id="sync-milestones" checked>
+              <label for="sync-milestones" style="font-weight: normal;">マイルストーン</label>
+            </div>
+          </div>
+          
+          <div class="form-actions">
+            <button class="button">保存</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- エクスポートタブ -->
+      <div class="tab-content" id="export-tab">
+        <div class="card">
+          <h2 class="card-title">データエクスポート</h2>
+          
+          <div class="form-group">
+            <label>エクスポート形式</label>
+            <div class="checkbox-group">
+              <input type="radio" name="export-format" id="export-pdf" checked>
+              <label for="export-pdf" style="font-weight: normal;">PDF</label>
+            </div>
+            
+            <div class="checkbox-group">
+              <input type="radio" name="export-format" id="export-excel">
+              <label for="export-excel" style="font-weight: normal;">Excel</label>
+            </div>
+            
+            <div class="checkbox-group">
+              <input type="radio" name="export-format" id="export-csv">
+              <label for="export-csv" style="font-weight: normal;">CSV</label>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label>エクスポート内容</label>
+            
+            <div class="checkbox-group">
+              <input type="checkbox" id="export-all-plans" checked>
+              <label for="export-all-plans" style="font-weight: normal;">すべてのプラン</label>
+            </div>
+            
+            <div class="checkbox-group">
+              <input type="checkbox" id="export-tasks" checked>
+              <label for="export-tasks" style="font-weight: normal;">タスク一覧</label>
+            </div>
+            
+            <div class="checkbox-group">
+              <input type="checkbox" id="export-progress" checked>
+              <label for="export-progress" style="font-weight: normal;">進捗状況</label>
+            </div>
+          </div>
+          
+          <div class="form-actions">
+            <button class="button">エクスポート</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // メニュートグル
+    document.getElementById('menu-toggle').addEventListener('click', function() {
+      document.querySelector('.sidebar').classList.toggle('open');
+    });
+    
+    // タブ切り替え
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', function() {
+        // アクティブタブのスタイル変更
+        tabs.forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        
+        // タブコンテンツの切り替え
+        const tabContents = document.querySelectorAll('.tab-content');
+        tabContents.forEach(content => content.classList.remove('active'));
+        
+        const tabName = this.getAttribute('data-tab');
+        document.getElementById(tabName + '-tab').classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

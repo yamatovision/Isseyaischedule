@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>プランナビ - ダッシュボード</title>
+  <!-- Material UI CDN -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <!-- React & React DOM -->
+  <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+  <!-- Babel for JSX -->
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <!-- Material UI -->
+  <script src="https://unpkg.com/@material-ui/core@4.12.4/umd/material-ui.production.min.js"></script>
+  <!-- Chart.js for analytics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background-color: #f5f5f5;
+    }
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .main-content {
+      flex: 1;
+      padding: 24px;
+      margin-top: 64px;
+      margin-left: 240px;
+      transition: margin-left 0.3s;
+    }
+    .app-bar {
+      background-color: #fff !important;
+      color: #333 !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12) !important;
+      position: fixed !important;
+      z-index: 1201 !important;
+    }
+    .drawer {
+      width: 240px;
+      flex-shrink: 0;
+    }
+    .drawer-paper {
+      width: 240px;
+      box-sizing: border-box;
+      border-right: none !important;
+      background-color: #1976d2 !important;
+      color: white !important;
+    }
+    .drawer-item {
+      color: rgba(255, 255, 255, 0.7) !important;
+    }
+    .drawer-item.active {
+      background-color: rgba(255, 255, 255, 0.14) !important;
+      color: white !important;
+    }
+    .drawer-item:hover {
+      background-color: rgba(255, 255, 255, 0.08) !important;
+    }
+    .drawer-icon {
+      color: rgba(255, 255, 255, 0.7) !important;
+    }
+    .active .drawer-icon {
+      color: white !important;
+    }
+    .section-title {
+      margin-bottom: 16px !important;
+      font-weight: 500 !important;
+    }
+    .dashboard-card {
+      margin-bottom: 24px;
+      height: 100%;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .dashboard-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1) !important;
+    }
+    .card-content {
+      padding: 16px !important;
+    }
+    .task-priority-high {
+      border-left: 4px solid #f44336;
+    }
+    .task-priority-medium {
+      border-left: 4px solid #ff9800;
+    }
+    .task-priority-low {
+      border-left: 4px solid #4caf50;
+    }
+    .grid-container {
+      padding: 16px 0;
+    }
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+    .badge {
+      min-width: 20px;
+      height: 20px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f44336;
+      color: white;
+      font-size: 12px;
+      padding: 0 6px;
+      margin-left: 8px;
+    }
+    .add-plan-button {
+      position: fixed !important;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1000;
+    }
+    .search-field {
+      background-color: rgba(255, 255, 255, 0.15);
+      border-radius: 4px;
+      color: #333;
+      padding: 6px 16px;
+      width: 240px;
+    }
+    .search-field:hover {
+      background-color: rgba(255, 255, 255, 0.25);
+    }
+    @media (max-width: 960px) {
+      .main-content {
+        margin-left: 0;
+        padding: 16px;
+      }
+      .search-field {
+        width: 160px;
+      }
+    }
+    @media (max-width: 600px) {
+      .search-field {
+        display: none;
+      }
+    }
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(255, 255, 255, 0.8);
+      z-index: 2000;
+    }
+    .chart-container {
+      position: relative;
+      height: 200px;
+      width: 100%;
+    }
+    .plan-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+    }
+    .plan-icon {
+      background-color: #e3f2fd;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+    }
+    .avatar {
+      background-color: #1976d2 !important;
+    }
+    .plan-card-content {
+      padding: 0 16px 16px !important;
+    }
+    .plan-item {
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const {
+      AppBar, Toolbar, IconButton, Typography, Drawer, List, ListItem, ListItemIcon, ListItemText, 
+      Divider, Button, Grid, Paper, Card, CardContent, Avatar, Box, LinearProgress, 
+      Menu, MenuItem, Badge, CircularProgress, Fab, TextField, InputAdornment, Chip
+    } = MaterialUI;
+
+    function Dashboard() {
+      const [mobileOpen, setMobileOpen] = React.useState(false);
+      const [anchorEl, setAnchorEl] = React.useState(null);
+      const [loading, setLoading] = React.useState(false);
+      const [searchTerm, setSearchTerm] = React.useState('');
+      const [plans, setPlans] = React.useState([
+        {
+          id: 1,
+          title: '新規出店計画',
+          type: 'store',
+          startDate: '2023-05-01',
+          endDate: '2023-08-15',
+          progress: 65,
+          tasks: 18,
+          completedTasks: 12
+        },
+        {
+          id: 2,
+          title: 'マーケティングキャンペーン',
+          type: 'marketing',
+          startDate: '2023-06-10',
+          endDate: '2023-07-30',
+          progress: 40,
+          tasks: 12,
+          completedTasks: 5
+        },
+        {
+          id: 3,
+          title: '新商品発売準備',
+          type: 'product',
+          startDate: '2023-07-01',
+          endDate: '2023-09-30',
+          progress: 25,
+          tasks: 24,
+          completedTasks: 6
+        }
+      ]);
+      
+      const [upcomingTasks, setUpcomingTasks] = React.useState([
+        {
+          id: 1,
+          title: '不動産物件の内見',
+          planTitle: '新規出店計画',
+          dueDate: '2023-05-20',
+          priority: 'high'
+        },
+        {
+          id: 2,
+          title: 'SNS広告デザイン作成',
+          planTitle: 'マーケティングキャンペーン',
+          dueDate: '2023-05-22',
+          priority: 'medium'
+        },
+        {
+          id: 3,
+          title: '資金調達計画書作成',
+          planTitle: '新規出店計画',
+          dueDate: '2023-05-25',
+          priority: 'high'
+        },
+        {
+          id: 4,
+          title: 'パッケージデザイン検討',
+          planTitle: '新商品発売準備',
+          dueDate: '2023-05-28',
+          priority: 'low'
+        }
+      ]);
+
+      React.useEffect(() => {
+        // ダッシュボード統計グラフの初期化
+        const ctx = document.getElementById('progress-chart');
+        if (ctx) {
+          new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+              labels: ['完了', '進行中', '未開始'],
+              datasets: [{
+                data: [35, 40, 25],
+                backgroundColor: ['#4caf50', '#2196f3', '#e0e0e0'],
+                borderWidth: 0
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              cutout: '70%',
+              plugins: {
+                legend: {
+                  position: 'bottom'
+                }
+              }
+            }
+          });
+        }
+      }, []);
+
+      const handleDrawerToggle = () => {
+        setMobileOpen(!mobileOpen);
+      };
+
+      const handleMenuOpen = (event) => {
+        setAnchorEl(event.currentTarget);
+      };
+
+      const handleMenuClose = () => {
+        setAnchorEl(null);
+      };
+
+      const handleCreatePlan = () => {
+        setLoading(true);
+        // 新規計画作成ページへの遷移をシミュレート
+        setTimeout(() => {
+          setLoading(false);
+          alert('新規計画作成ページに移動します');
+        }, 1000);
+      };
+
+      const handlePlanClick = (planId) => {
+        setLoading(true);
+        // 計画詳細ページへの遷移をシミュレート
+        setTimeout(() => {
+          setLoading(false);
+          alert(`計画ID: ${planId} の詳細ページに移動します`);
+        }, 800);
+      };
+
+      const drawer = (
+        <div>
+          <Toolbar>
+            <Typography variant="h6" noWrap>
+              プランナビ
+            </Typography>
+          </Toolbar>
+          <Divider />
+          <List>
+            <ListItem button className="drawer-item active">
+              <ListItemIcon>
+                <span className="material-icons drawer-icon">dashboard</span>
+              </ListItemIcon>
+              <ListItemText primary="ダッシュボード" />
+            </ListItem>
+            <ListItem button className="drawer-item">
+              <ListItemIcon>
+                <span className="material-icons drawer-icon">event_note</span>
+              </ListItemIcon>
+              <ListItemText primary="マイプラン" />
+            </ListItem>
+            <ListItem button className="drawer-item">
+              <ListItemIcon>
+                <span className="material-icons drawer-icon">check_circle</span>
+              </ListItemIcon>
+              <ListItemText primary="タスク" />
+            </ListItem>
+            <ListItem button className="drawer-item">
+              <ListItemIcon>
+                <span className="material-icons drawer-icon">calendar_today</span>
+              </ListItemIcon>
+              <ListItemText primary="カレンダー" />
+            </ListItem>
+          </List>
+          <Divider />
+          <List>
+            <ListItem button className="drawer-item">
+              <ListItemIcon>
+                <span className="material-icons drawer-icon">settings</span>
+              </ListItemIcon>
+              <ListItemText primary="設定" />
+            </ListItem>
+            <ListItem button className="drawer-item">
+              <ListItemIcon>
+                <span className="material-icons drawer-icon">help_outline</span>
+              </ListItemIcon>
+              <ListItemText primary="ヘルプ" />
+            </ListItem>
+          </List>
+        </div>
+      );
+
+      const getPriorityClass = (priority) => {
+        switch(priority) {
+          case 'high': return 'task-priority-high';
+          case 'medium': return 'task-priority-medium';
+          case 'low': return 'task-priority-low';
+          default: return '';
+        }
+      };
+
+      const formatDate = (dateString) => {
+        const options = { month: 'short', day: 'numeric' };
+        return new Date(dateString).toLocaleDateString('ja-JP', options);
+      };
+
+      const getTypeIcon = (type) => {
+        switch(type) {
+          case 'store': return 'storefront';
+          case 'marketing': return 'campaign';
+          case 'product': return 'inventory_2';
+          default: return 'description';
+        }
+      };
+
+      return (
+        <div className="app-container">
+          {loading && (
+            <div className="loading-overlay">
+              <CircularProgress />
+            </div>
+          )}
+          
+          {/* アプリバー */}
+          <AppBar position="fixed" className="app-bar">
+            <Toolbar>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={handleDrawerToggle}
+                sx={{ mr: 2, display: { md: 'none' } }}
+              >
+                <span className="material-icons">menu</span>
+              </IconButton>
+              
+              <Typography variant="h6" noWrap component="div" sx={{ display: { xs: 'none', sm: 'block' } }}>
+                プランナビ
+              </Typography>
+              
+              <Box sx={{ flexGrow: 1 }} />
+              
+              <TextField 
+                placeholder="検索..."
+                variant="standard"
+                className="search-field"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <span className="material-icons">search</span>
+                    </InputAdornment>
+                  ),
+                  disableUnderline: true
+                }}
+              />
+              
+              <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                <IconButton color="inherit">
+                  <Badge badgeContent={4} color="error">
+                    <span className="material-icons">notifications</span>
+                  </Badge>
+                </IconButton>
+                
+                <IconButton
+                  edge="end"
+                  aria-label="account of current user"
+                  aria-haspopup="true"
+                  onClick={handleMenuOpen}
+                  color="inherit"
+                >
+                  <Avatar className="avatar">S</Avatar>
+                </IconButton>
+              </Box>
+            </Toolbar>
+          </AppBar>
+          
+          {/* サイドナビゲーション */}
+          <nav>
+            <Drawer
+              variant="temporary"
+              open={mobileOpen}
+              onClose={handleDrawerToggle}
+              ModalProps={{
+                keepMounted: true,
+              }}
+              sx={{
+                display: { xs: 'block', md: 'none' },
+              }}
+              classes={{
+                paper: "drawer-paper"
+              }}
+            >
+              {drawer}
+            </Drawer>
+            
+            <Drawer
+              variant="permanent"
+              sx={{
+                display: { xs: 'none', md: 'block' },
+                '& .MuiDrawer-paper': { position: 'fixed' },
+              }}
+              open
+              classes={{
+                paper: "drawer-paper"
+              }}
+            >
+              {drawer}
+            </Drawer>
+          </nav>
+          
+          {/* メインコンテンツ */}
+          <main className="main-content">
+            <Typography variant="h4" gutterBottom>
+              ダッシュボード
+            </Typography>
+            
+            <Grid container spacing={3} className="grid-container">
+              {/* 進行中のプラン */}
+              <Grid item xs={12} md={8}>
+                <Typography variant="h6" className="section-title">
+                  進行中のプラン
+                </Typography>
+                
+                <Grid container spacing={3}>
+                  {plans.map((plan) => (
+                    <Grid item xs={12} sm={6} key={plan.id}>
+                      <Card className="dashboard-card plan-item" onClick={() => handlePlanClick(plan.id)}>
+                        <div className="plan-card-header">
+                          <Box display="flex" alignItems="center">
+                            <div className="plan-icon">
+                              <span className="material-icons">{getTypeIcon(plan.type)}</span>
+                            </div>
+                            <div>
+                              <Typography variant="subtitle1" component="h2">
+                                {plan.title}
+                              </Typography>
+                              <Typography variant="body2" color="textSecondary">
+                                {formatDate(plan.startDate)} - {formatDate(plan.endDate)}
+                              </Typography>
+                            </div>
+                          </Box>
+                          <IconButton size="small">
+                            <span className="material-icons">more_vert</span>
+                          </IconButton>
+                        </div>
+                        
+                        <div className="plan-card-content">
+                          <Box mb={1}>
+                            <div className="progress-label">
+                              <Typography variant="body2">進捗状況</Typography>
+                              <Typography variant="body2">{plan.progress}%</Typography>
+                            </div>
+                            <LinearProgress 
+                              variant="determinate" 
+                              value={plan.progress} 
+                              color={
+                                plan.progress < 30 ? "secondary" : 
+                                plan.progress < 70 ? "primary" : "primary"
+                              }
+                            />
+                          </Box>
+                          
+                          <Box display="flex" justifyContent="space-between" alignItems="center">
+                            <Chip 
+                              label={`タスク: ${plan.completedTasks}/${plan.tasks}`} 
+                              size="small" 
+                              variant="outlined"
+                            />
+                            <Button size="small" color="primary" endIcon={<span className="material-icons">arrow_forward</span>}>
+                              詳細
+                            </Button>
+                          </Box>
+                        </div>
+                      </Card>
+                    </Grid>
+                  ))}
+                </Grid>
+              </Grid>
+              
+              {/* 統計情報 */}
+              <Grid item xs={12} md={4}>
+                <Typography variant="h6" className="section-title">
+                  全体の進捗状況
+                </Typography>
+                <Card className="dashboard-card">
+                  <CardContent>
+                    <div className="chart-container">
+                      <canvas id="progress-chart"></canvas>
+                    </div>
+                    <Box mt={2}>
+                      <Typography variant="body2" align="center">
+                        全タスク数: 54 | 完了タスク: 19
+                      </Typography>
+                    </Box>
+                  </CardContent>
+                </Card>
+              </Grid>
+              
+              {/* 直近の期限タスク */}
+              <Grid item xs={12}>
+                <Typography variant="h6" className="section-title">
+                  直近の期限タスク
+                </Typography>
+                <Card>
+                  <List>
+                    {upcomingTasks.map((task) => (
+                      <React.Fragment key={task.id}>
+                        <ListItem className={getPriorityClass(task.priority)}>
+                          <ListItemIcon>
+                            <IconButton size="small">
+                              <span className="material-icons">check_circle_outline</span>
+                            </IconButton>
+                          </ListItemIcon>
+                          <ListItemText 
+                            primary={task.title} 
+                            secondary={`${task.planTitle} | 期限: ${formatDate(task.dueDate)}`}
+                          />
+                          <Chip 
+                            label={
+                              task.priority === 'high' ? '高' : 
+                              task.priority === 'medium' ? '中' : '低'
+                            }
+                            size="small"
+                            color={
+                              task.priority === 'high' ? 'secondary' : 
+                              task.priority === 'medium' ? 'primary' : 'default'
+                            }
+                          />
+                        </ListItem>
+                        <Divider variant="inset" component="li" />
+                      </React.Fragment>
+                    ))}
+                  </List>
+                </Card>
+              </Grid>
+            </Grid>
+            
+            {/* 新規計画作成ボタン */}
+            <Fab 
+              color="primary" 
+              aria-label="add" 
+              className="add-plan-button"
+              onClick={handleCreatePlan}
+            >
+              <span className="material-icons">add</span>
+            </Fab>
+          </main>
+          
+          {/* ユーザーメニュー */}
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
+            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          >
+            <MenuItem onClick={handleMenuClose}>プロフィール</MenuItem>
+            <MenuItem onClick={handleMenuClose}>アカウント設定</MenuItem>
+            <Divider />
+            <MenuItem onClick={handleMenuClose}>ログアウト</MenuItem>
+          </Menu>
+        </div>
+      );
+    }
+
+    ReactDOM.render(<Dashboard />, document.getElementById('root'));
+  </script>
+</body>
+</html>
