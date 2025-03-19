@@ -12,8 +12,8 @@
     "REACT_APP_STORAGE_PREFIX": "schedle_",
     "REACT_APP_WEBSOCKET_URL": "wss://isseyaischedule-production.up.railway.app/ws"
   },
-  "framework": "create-react-app",
   "buildCommand": "npm run build",
+  "installCommand": "npm install",
   "outputDirectory": "build",
   "routes": [
     { "src": "/static/(.*)", "dest": "/static/$1" },
