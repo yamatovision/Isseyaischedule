@@ -282,7 +282,7 @@ const generateTasksFromConversation = async (conversationHistory) => {
   
   try {
     // APIキーの設定
-    const apiKey = process.env.CLAUDE_API_KEY || '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';
+    const apiKey = process.env.CLAUDE_API_KEY;
     
     if (!apiKey) {
       console.warn('【API連携】Claude APIキーが設定されていません。テンプレートにフォールバックします。');
@@ -470,7 +470,7 @@ const convertChatToStructuredTasks = async (project, chatData) => {
     console.log('【API連携】Claude APIを呼び出し中...');
     
     // APIキーの設定
-    const apiKey = process.env.CLAUDE_API_KEY || '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';
+    const apiKey = process.env.CLAUDE_API_KEY;
     
     if (!apiKey) {
       console.warn('【API連携】Claude APIキーが設定されていません。テンプレートにフォールバックします。');
@@ -859,7 +859,7 @@ const processChatWithAI = async (message, projectId, clientConversation = null) 
     console.log('【API連携】Claude APIを呼び出し中...');
     
     // APIキーの設定
-    const apiKey = process.env.CLAUDE_API_KEY || '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';
+    const apiKey = process.env.CLAUDE_API_KEY;
     
     if (!apiKey) {
       console.warn('【API連携】Claude APIキーが設定されていません。簡易レスポンスにフォールバックします。');
@@ -1041,7 +1041,7 @@ const suggestSolutionsWithAI = async (issue) => {
     console.log('【API連携】Claude APIを呼び出し中...');
     
     // APIキーの設定
-    const apiKey = process.env.CLAUDE_API_KEY || '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';
+    const apiKey = process.env.CLAUDE_API_KEY;
     
     if (!apiKey) {
       console.warn('Claude APIキーが設定されていません。テンプレートにフォールバックします。');

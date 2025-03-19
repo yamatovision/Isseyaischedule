@@ -6,8 +6,8 @@
 const axios = require('axios');
 require('dotenv').config();
 
-// 直接APIキーを使用 (実運用コードでは環境変数を使用するべき)
-const apiKey = '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';
+// 環境変数からAPIキーを取得
+const apiKey = process.env.CLAUDE_API_KEY;
 
 console.log('使用するAPIキー:', apiKey.substring(0, 12) + '...');
 
