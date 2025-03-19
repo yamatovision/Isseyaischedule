@@ -28,7 +28,9 @@ import {
   ListItemText,
   ListItemSecondaryAction,
   Checkbox,
-  Avatar
+  Avatar,
+  Menu,
+  MenuItem
 } from '@material-ui/core';
 
 // Material-UIアイコン
@@ -42,6 +44,8 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import PieChartIcon from '@material-ui/icons/PieChart';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import ChatIcon from '@material-ui/icons/Chat';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 // カスタムスタイル
 const useStyles = makeStyles((theme) => ({
@@ -241,40 +245,52 @@ const Dashboard = () => {
       setErrorMessage('');
       
       try {
-        // モックデータを設定（API呼び出しが問題の場合のフォールバック）
-        console.log('【ダッシュボード】初期データを設定します');
+        console.log('【ダッシュボード】APIからデータを取得します');
         
-        // ダミーデータを設定
-        setStats({
-          completed: 5,
-          inProgress: 10,
-          notStarted: 15,
-          totalTasks: 30
-        });
+        // 統計情報を取得
+        const statsResult = await fetchStats();
+        if (statsResult && statsResult.data && statsResult.data.stats) {
+          console.log('【ダッシュボード】統計情報を取得しました:', statsResult.data.stats);
+          setStats(statsResult.data.stats);
+        } else {
+          console.log('【ダッシュボード】統計情報の取得に失敗しました、デフォルト値を使用します');
+          setStats({
+            completed: 0,
+            inProgress: 0,
+            notStarted: 0,
+            totalTasks: 0
+          });
+        }
         
-        setUpcomingTasks([
-          {
-            id: 'mock-task-1',
-            title: 'テストタスク1',
-            project: 'テストプロジェクト',
-            dueDate: new Date().toISOString().split('T')[0],
-            priority: 'high',
-            completed: false
-          },
-          {
-            id: 'mock-task-2',
-            title: 'テストタスク2',
-            project: 'テストプロジェクト',
-            dueDate: new Date().toISOString().split('T')[0],
-            priority: 'medium',
-            completed: false
-          }
-        ]);
+        // 直近のタスク取得
+        const tasksResult = await fetchUpcomingTasks();
+        if (tasksResult && tasksResult.data && tasksResult.data.tasks) {
+          console.log('【ダッシュボード】タスク情報を取得しました:', tasksResult.data.tasks.length, '件');
+          setUpcomingTasks(tasksResult.data.tasks);
+        } else {
+          console.log('【ダッシュボード】タスク情報の取得に失敗しました、空の配列を使用します');
+          setUpcomingTasks([]);
+        }
         
-        console.log('【ダッシュボード】デモデータのロードが完了しました');
+        // プラン一覧を取得 (既存のfetchPlans関数を使用)
+        const plansResult = await fetchPlans();
+        if (plansResult && plansResult.length > 0) {
+          console.log('【ダッシュボード】プラン情報を取得しました:', plansResult.length, '件');
+        }
+        
+        console.log('【ダッシュボード】APIデータのロードが完了しました');
       } catch (err) {
         console.error('【ダッシュボード】データの取得中にエラーが発生しました:', err);
         setErrorMessage('データの読み込み中にエラーが発生しました。再度お試しください。');
+        
+        // エラー時はデフォルト値を設定
+        setStats({
+          completed: 0,
+          inProgress: 0,
+          notStarted: 0,
+          totalTasks: 0
+        });
+        setUpcomingTasks([]);
       } finally {
         console.log('【ダッシュボード】ローディング状態を解除します');
         setIsLoading(false);
@@ -287,7 +303,7 @@ const Dashboard = () => {
     return () => {
       console.log('【ダッシュボード】コンポーネントがアンマウントされました');
     };
-  }, [/* 依存配列を空にして、マウント時に一度だけ実行 */]);
+  }, [/* 依存配列を空にして初回のみ実行 */]);
   
   // プランの詳細ページへ遷移
   const handlePlanClick = (planId) => {
