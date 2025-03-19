@@ -1,0 +1,13 @@
+# バックエンド関連ファイルを除外
+/api
+/test
+/test-results
+/tests
+/temp
+*.js
+!src/**/*.js
+!public/**/*.js
+node_modules
+/.git
+/logs
+/資料
