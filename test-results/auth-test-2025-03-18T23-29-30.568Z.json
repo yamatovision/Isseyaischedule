@@ -1,0 +1,46 @@
+{
+  "timestamp": "2025-03-18T23:29:30.568Z",
+  "apiUrl": "http://localhost:5000/api/v1",
+  "results": [
+    {
+      "test": "ログイン",
+      "success": false,
+      "message": "ログインエラー: 認証情報が無効です",
+      "timestamp": "2025-03-18T23:29:30.542Z",
+      "data": "{\"success\":false,\"message\":\"認証情報が無効です\"}"
+    },
+    {
+      "test": "招待コード検証",
+      "success": false,
+      "message": "招待コード検証エラー: 招待コードが必要です",
+      "timestamp": "2025-03-18T23:29:30.546Z",
+      "data": "{\"success\":false,\"message\":\"招待コードが必要です\"}"
+    },
+    {
+      "test": "ユーザー登録",
+      "success": false,
+      "message": "ユーザー登録エラー: 無効または期限切れの招待コードです",
+      "timestamp": "2025-03-18T23:29:30.558Z",
+      "data": "{\"success\":false,\"message\":\"無効または期限切れの招待コードです\"}"
+    },
+    {
+      "test": "パスワードリセットリクエスト",
+      "success": true,
+      "message": "パスワードリセット手順をメールで送信しました（メールアドレスが登録されている場合）",
+      "timestamp": "2025-03-18T23:29:30.563Z",
+      "data": "{\"success\":true,\"message\":\"パスワードリセット手順をメールで送信しました（メールアドレスが登録されている場合）\"}"
+    },
+    {
+      "test": "ログイン",
+      "success": false,
+      "message": "ログインエラー: 認証情報が無効です",
+      "timestamp": "2025-03-18T23:29:30.568Z",
+      "data": "{\"success\":false,\"message\":\"認証情報が無効です\"}"
+    }
+  ],
+  "summary": {
+    "total": 5,
+    "passed": 1,
+    "failed": 4
+  }
+}

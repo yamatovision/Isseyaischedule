@@ -1,0 +1,60 @@
+{
+  "timestamp": "2025-03-18T23:23:26.123Z",
+  "apiUrl": "http://localhost:5000/api/v1",
+  "results": [
+    {
+      "test": "ログイン",
+      "success": true,
+      "message": "ログインが成功しました",
+      "timestamp": "2025-03-18T23:23:26.101Z",
+      "data": "{\"email\":\"test@example.com\",\"token\":\"[REDACTED]\",\"user\":{\"id\":\"test-user-id-123\",\"email\":\"test@example.com\",\"name\":\"テストユーザー\",\"role\":\"user\",\"profilePicture\":null}}"
+    },
+    {
+      "test": "招待コード生成",
+      "success": false,
+      "message": "招待コード生成エラー: 招待コードの作成に失敗しました",
+      "timestamp": "2025-03-18T23:23:26.112Z",
+      "data": "{\"success\":false,\"message\":\"招待コードの作成に失敗しました\"}"
+    },
+    {
+      "test": "招待コード検証",
+      "success": false,
+      "message": "招待コード検証エラー: 招待コードが必要です",
+      "timestamp": "2025-03-18T23:23:26.114Z",
+      "data": "{\"success\":false,\"message\":\"招待コードが必要です\"}"
+    },
+    {
+      "test": "ユーザー登録",
+      "success": true,
+      "message": "ユーザー登録が成功しました",
+      "timestamp": "2025-03-18T23:23:26.118Z",
+      "data": "{\"email\":\"test337475@example.com\",\"token\":\"[REDACTED]\",\"user\":{\"id\":\"test-user-id-123\",\"email\":\"test337475@example.com\",\"name\":\"テストユーザー\",\"role\":\"user\",\"profilePicture\":null}}"
+    },
+    {
+      "test": "プロフィール取得",
+      "success": true,
+      "message": "プロフィール取得が成功しました",
+      "timestamp": "2025-03-18T23:23:26.119Z",
+      "data": "{\"success\":true,\"user\":{\"id\":\"test-user-id-123\",\"email\":\"test@example.com\",\"name\":\"テストユーザー\",\"role\":\"user\",\"profilePicture\":null}}"
+    },
+    {
+      "test": "パスワードリセットリクエスト",
+      "success": true,
+      "message": "パスワードリセット手順をメールで送信しました（メールアドレスが登録されている場合）",
+      "timestamp": "2025-03-18T23:23:26.121Z",
+      "data": "{\"success\":true,\"message\":\"パスワードリセット手順をメールで送信しました（メールアドレスが登録されている場合）\"}"
+    },
+    {
+      "test": "ログアウト",
+      "success": true,
+      "message": "ログアウトしました",
+      "timestamp": "2025-03-18T23:23:26.122Z",
+      "data": "{\"success\":true,\"message\":\"ログアウトしました\"}"
+    }
+  ],
+  "summary": {
+    "total": 7,
+    "passed": 5,
+    "failed": 2
+  }
+}

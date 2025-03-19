@@ -1,0 +1,61 @@
+{
+  "timestamp": "2025-03-19T03:11:40.259Z",
+  "success": 1,
+  "failure": 4,
+  "skipped": 1,
+  "tests": [
+    {
+      "name": "認証トークン検証",
+      "status": "failure",
+      "startTime": 1742353900266,
+      "error": {
+        "message": "",
+        "stack": "AggregateError\n    at AxiosError.from (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:857:14)\n    at RedirectableRequest.handleRequestError (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:3169:25)\n    at RedirectableRequest.emit (node:events:507:28)\n    at eventHandlers.<computed> (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/follow-redirects/index.js:49:24)\n    at ClientRequest.emit (node:events:507:28)\n    at emitErrorEvent (node:_http_client:104:11)\n    at Socket.socketErrorListener (node:_http_client:518:5)\n    at Socket.emit (node:events:507:28)\n    at emitErrorNT (node:internal/streams/destroy:170:8)\n    at emitErrorCloseNT (node:internal/streams/destroy:129:3)\n    at Axios.request (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:4258:41)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async testAuthTokenValidation (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/security-test.js:80:25)\n    at async runTest (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/security-test.js:55:5)\n    at async runAllTests (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/security-test.js:327:3)"
+      },
+      "endTime": 1742353900298,
+      "duration": 32
+    },
+    {
+      "name": "CSRF保護テスト",
+      "status": "failure",
+      "startTime": 1742353900298,
+      "error": {
+        "message": "",
+        "stack": "AggregateError\n    at AxiosError.from (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:857:14)\n    at RedirectableRequest.handleRequestError (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:3169:25)\n    at RedirectableRequest.emit (node:events:507:28)\n    at eventHandlers.<computed> (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/follow-redirects/index.js:49:24)\n    at ClientRequest.emit (node:events:507:28)\n    at emitErrorEvent (node:_http_client:104:11)\n    at Socket.socketErrorListener (node:_http_client:518:5)\n    at Socket.emit (node:events:507:28)\n    at emitErrorNT (node:internal/streams/destroy:170:8)\n    at emitErrorCloseNT (node:internal/streams/destroy:129:3)\n    at Axios.request (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:4258:41)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async testCSRFProtection (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/security-test.js:117:27)\n    at async runTest (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/security-test.js:55:5)\n    at async runAllTests (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/security-test.js:328:3)"
+      },
+      "endTime": 1742353900304,
+      "duration": 6
+    },
+    {
+      "name": "XSS脆弱性テスト",
+      "status": "success",
+      "startTime": 1742353900305,
+      "endTime": 1742353900312,
+      "duration": 7
+    },
+    {
+      "name": "アクセス制御テスト",
+      "status": "failure",
+      "startTime": 1742353900312,
+      "error": {
+        "message": "管理者APIへのアクセス制御が適切に行われていません",
+        "stack": "AssertionError [ERR_ASSERTION]: 管理者APIへのアクセス制御が適切に行われていません\n    at testAccessControl (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/security-test.js:245:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async runTest (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/security-test.js:55:5)\n    at async runAllTests (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/security-test.js:330:3)"
+      },
+      "endTime": 1742353900317,
+      "duration": 5
+    },
+    {
+      "name": "パスワードポリシーテスト",
+      "status": "failure",
+      "startTime": 1742353900317,
+      "error": {
+        "message": "パスワードポリシーが適切に実装されていません",
+        "stack": "AssertionError [ERR_ASSERTION]: パスワードポリシーが適切に実装されていません\n    at testPasswordPolicy (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/security-test.js:294:14)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async runTest (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/security-test.js:55:5)\n    at async runAllTests (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/security-test.js:331:3)"
+      },
+      "endTime": 1742353900321,
+      "duration": 4
+    }
+  ],
+  "duration": 59,
+  "totalTests": 5
+}

@@ -1,0 +1,57 @@
+{
+  "timestamp": "2025-03-19T03:28:45.459Z",
+  "success": 2,
+  "failure": 3,
+  "skipped": 1,
+  "tests": [
+    {
+      "name": "認証トークン検証",
+      "status": "failure",
+      "startTime": 1742354925461,
+      "error": {
+        "message": "Request failed with status code 500",
+        "stack": "AxiosError: Request failed with status code 500\n    at settle (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:2031:12)\n    at IncomingMessage.handleStreamEnd (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:3148:11)\n    at IncomingMessage.emit (node:events:529:35)\n    at endReadableNT (node:internal/streams/readable:1400:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)\n    at Axios.request (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:4258:41)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async testAuthTokenValidation (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/security-test.js:94:29)\n    at async runTest (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/security-test.js:55:5)\n    at async runAllTests (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/security-test.js:450:3)"
+      },
+      "endTime": 1742354925500,
+      "duration": 39
+    },
+    {
+      "name": "CSRF保護テスト",
+      "status": "failure",
+      "startTime": 1742354925500,
+      "error": {
+        "message": "Request failed with status code 401",
+        "stack": "AxiosError: Request failed with status code 401\n    at settle (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:2031:12)\n    at IncomingMessage.handleStreamEnd (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:3148:11)\n    at IncomingMessage.emit (node:events:529:35)\n    at endReadableNT (node:internal/streams/readable:1400:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)\n    at Axios.request (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:4258:41)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async testCSRFProtection (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/security-test.js:158:27)\n    at async runTest (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/security-test.js:55:5)\n    at async runAllTests (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/security-test.js:451:3)"
+      },
+      "endTime": 1742354925513,
+      "duration": 13
+    },
+    {
+      "name": "XSS脆弱性テスト",
+      "status": "success",
+      "startTime": 1742354925513,
+      "endTime": 1742354925526,
+      "duration": 13
+    },
+    {
+      "name": "アクセス制御テスト",
+      "status": "success",
+      "startTime": 1742354925526,
+      "endTime": 1742354925537,
+      "duration": 11
+    },
+    {
+      "name": "パスワードポリシーテスト",
+      "status": "failure",
+      "startTime": 1742354925537,
+      "error": {
+        "message": "パスワードポリシーが適切に実装されていないか、テスト中にエラーが発生しました",
+        "stack": "AssertionError [ERR_ASSERTION]: パスワードポリシーが適切に実装されていないか、テスト中にエラーが発生しました\n    at testPasswordPolicy (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/security-test.js:438:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async runTest (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/security-test.js:55:5)\n    at async runAllTests (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/security-test.js:454:3)"
+      },
+      "endTime": 1742354925580,
+      "duration": 43
+    }
+  ],
+  "duration": 121,
+  "totalTests": 5
+}

@@ -111,7 +111,7 @@ const Sidebar = ({ isOpen, onClose }) => {
       icon: <DashboardIcon />,
     },
     {
-      label: 'チャット作成',
+      label: 'AIとプランを作成する',
       path: '/chat-to-gantt',
       icon: <ChatIcon />,
     },

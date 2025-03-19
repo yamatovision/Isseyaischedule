@@ -1,0 +1,15 @@
+{
+  "timestamp": "2025-03-19T03-13-03.307Z",
+  "results": {
+    "api": false,
+    "component": false,
+    "security": true
+  },
+  "success": 1,
+  "total": 3,
+  "options": {
+    "api": true,
+    "component": true,
+    "security": true
+  }
+}

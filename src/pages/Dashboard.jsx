@@ -247,13 +247,29 @@ const Dashboard = () => {
       try {
         console.log('【ダッシュボード】APIからデータを取得します');
         
+        // まずプラン一覧を取得する（他のデータの基盤となるため）
+        const plansResult = await fetchPlans();
+        if (plansResult && plansResult.length > 0) {
+          console.log('【ダッシュボード】プラン情報を取得しました:', plansResult.length, '件');
+        } else {
+          console.log('【ダッシュボード】プラン情報の取得結果:', plansResult);
+        }
+        
         // 統計情報を取得
         const statsResult = await fetchStats();
-        if (statsResult && statsResult.data && statsResult.data.stats) {
-          console.log('【ダッシュボード】統計情報を取得しました:', statsResult.data.stats);
+        console.log('【ダッシュボード】統計情報レスポンス詳細確認:', JSON.stringify(statsResult, null, 2));
+        
+        // 両方の可能性のあるレスポンス形式に対応
+        if (statsResult?.data?.stats) {
+          console.log('【ダッシュボード】データ形式1で統計情報を取得しました:', statsResult.data.stats);
           setStats(statsResult.data.stats);
+        } else if (statsResult?.completed !== undefined) {
+          // 統計情報が直接オブジェクトとして返された場合
+          console.log('【ダッシュボード】データ形式2で統計情報を取得しました:', statsResult);
+          setStats(statsResult);
         } else {
           console.log('【ダッシュボード】統計情報の取得に失敗しました、デフォルト値を使用します');
+          console.log('【ダッシュボード】受信したレスポンス:', statsResult);
           setStats({
             completed: 0,
             inProgress: 0,
@@ -263,19 +279,25 @@ const Dashboard = () => {
         }
         
         // 直近のタスク取得
-        const tasksResult = await fetchUpcomingTasks();
-        if (tasksResult && tasksResult.data && tasksResult.data.tasks) {
-          console.log('【ダッシュボード】タスク情報を取得しました:', tasksResult.data.tasks.length, '件');
-          setUpcomingTasks(tasksResult.data.tasks);
-        } else {
-          console.log('【ダッシュボード】タスク情報の取得に失敗しました、空の配列を使用します');
+        try {
+          const tasksResult = await fetchUpcomingTasks();
+          console.log('【ダッシュボード】タスク結果を取得しました:', JSON.stringify(tasksResult, null, 2));
+          
+          // tasksプロパティが存在するかチェック
+          if (tasksResult && tasksResult.tasks && Array.isArray(tasksResult.tasks)) {
+            console.log('【ダッシュボード】タスク情報を取得しました:', tasksResult.tasks.length, '件');
+            setUpcomingTasks(tasksResult.tasks);
+          } else if (Array.isArray(tasksResult)) {
+            // 直接配列が返ってきた場合
+            console.log('【ダッシュボード】タスク情報を取得しました(配列):', tasksResult.length, '件');
+            setUpcomingTasks(tasksResult);
+          } else {
+            console.log('【ダッシュボード】形式不明のタスク情報です:', tasksResult);
+            setUpcomingTasks([]);
+          }
+        } catch (taskErr) {
+          console.error('【ダッシュボード】タスク取得エラー:', taskErr);
           setUpcomingTasks([]);
-        }
-        
-        // プラン一覧を取得 (既存のfetchPlans関数を使用)
-        const plansResult = await fetchPlans();
-        if (plansResult && plansResult.length > 0) {
-          console.log('【ダッシュボード】プラン情報を取得しました:', plansResult.length, '件');
         }
         
         console.log('【ダッシュボード】APIデータのロードが完了しました');
@@ -423,7 +445,7 @@ const Dashboard = () => {
           </Grid>
           <Grid item xs={4}>
             <Typography variant="h4" align="center" color="primary">
-              {stats.completed}
+              {stats.completed || 0}
             </Typography>
             <Typography variant="body2" align="center" color="textSecondary">
               完了
@@ -431,7 +453,7 @@ const Dashboard = () => {
           </Grid>
           <Grid item xs={4}>
             <Typography variant="h4" align="center" style={{ color: '#f59e0b' }}>
-              {stats.inProgress}
+              {stats.inProgress || 0}
             </Typography>
             <Typography variant="body2" align="center" color="textSecondary">
               進行中
@@ -439,7 +461,7 @@ const Dashboard = () => {
           </Grid>
           <Grid item xs={4}>
             <Typography variant="h4" align="center" color="textSecondary">
-              {stats.notStarted}
+              {stats.notStarted || 0}
             </Typography>
             <Typography variant="body2" align="center" color="textSecondary">
               未着手
@@ -538,12 +560,12 @@ const Dashboard = () => {
                           <Box className={classes.progressBarContainer}>
                             <Box display="flex" justifyContent="space-between">
                               <Typography variant="body2">進捗状況</Typography>
-                              <Typography variant="body2">{plan.progress}%</Typography>
+                              <Typography variant="body2">{plan.progress || 0}%</Typography>
                             </Box>
                             <LinearProgress
                               variant="determinate"
-                              value={plan.progress}
-                              color={getProgressColor(plan.progress)}
+                              value={plan.progress || 0}
+                              color={getProgressColor(plan.progress || 0)}
                               className={classes.progressBar}
                             />
                           </Box>
@@ -551,7 +573,7 @@ const Dashboard = () => {
                         <Divider />
                         <CardActions className={classes.cardActions}>
                           <Chip 
-                            label={`タスク: ${plan.completedTasks || 0}/${plan.tasks || 0}`} 
+                            label={`タスク: ${plan.completedTasks || 0}/${plan.totalTasks || plan.tasks || 0}`} 
                             size="small"
                             className={classes.taskChip}
                           />
