@@ -1,0 +1,62 @@
+{
+  "timestamp": "2025-03-19T02:49:29.409Z",
+  "success": 0,
+  "failure": 6,
+  "skipped": 0,
+  "tests": [
+    {
+      "name": "認証API - ログインエンドポイント",
+      "status": "failure",
+      "duration": 11,
+      "error": {
+        "message": "connect ECONNREFUSED ::1:5000",
+        "stack": "Error: connect ECONNREFUSED ::1:5000\n    at AxiosError.from (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:857:14)\n    at RedirectableRequest.handleRequestError (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:3169:25)\n    at RedirectableRequest.emit (node:events:529:35)\n    at eventHandlers.<computed> (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/follow-redirects/index.js:49:24)\n    at ClientRequest.emit (node:events:517:28)\n    at Socket.socketErrorListener (node:_http_client:501:9)\n    at Socket.emit (node:events:517:28)\n    at emitErrorNT (node:internal/streams/destroy:151:8)\n    at emitErrorCloseNT (node:internal/streams/destroy:116:3)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)\n    at Axios.request (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:4258:41)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async /Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:87:24\n    at async runTest (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:62:5)\n    at async testAuthEndpoints (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:85:3)\n    at async runTests (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:249:5)"
+      }
+    },
+    {
+      "name": "プロジェクトAPI - プロジェクト一覧取得",
+      "status": "failure",
+      "duration": 2,
+      "error": {
+        "message": "connect ECONNREFUSED ::1:5000",
+        "stack": "Error: connect ECONNREFUSED ::1:5000\n    at AxiosError.from (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:857:14)\n    at RedirectableRequest.handleRequestError (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:3169:25)\n    at RedirectableRequest.emit (node:events:529:35)\n    at eventHandlers.<computed> (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/follow-redirects/index.js:49:24)\n    at ClientRequest.emit (node:events:517:28)\n    at Socket.socketErrorListener (node:_http_client:501:9)\n    at Socket.emit (node:events:517:28)\n    at emitErrorNT (node:internal/streams/destroy:151:8)\n    at emitErrorCloseNT (node:internal/streams/destroy:116:3)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)\n    at Axios.request (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:4258:41)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async /Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:114:24\n    at async runTest (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:62:5)\n    at async testProjectEndpoints (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:112:3)\n    at async runTests (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:250:5)"
+      }
+    },
+    {
+      "name": "プロジェクトAPI - 特定プロジェクト取得",
+      "status": "failure",
+      "duration": 1,
+      "error": {
+        "message": "connect ECONNREFUSED ::1:5000",
+        "stack": "Error: connect ECONNREFUSED ::1:5000\n    at AxiosError.from (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:857:14)\n    at RedirectableRequest.handleRequestError (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:3169:25)\n    at RedirectableRequest.emit (node:events:529:35)\n    at eventHandlers.<computed> (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/follow-redirects/index.js:49:24)\n    at ClientRequest.emit (node:events:517:28)\n    at Socket.socketErrorListener (node:_http_client:501:9)\n    at Socket.emit (node:events:517:28)\n    at emitErrorNT (node:internal/streams/destroy:151:8)\n    at emitErrorCloseNT (node:internal/streams/destroy:116:3)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)\n    at Axios.request (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:4258:41)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async /Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:135:24\n    at async runTest (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:62:5)\n    at async testProjectEndpoints (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:133:3)\n    at async runTests (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:250:5)"
+      }
+    },
+    {
+      "name": "タスクAPI - プロジェクト内タスク一覧取得",
+      "status": "failure",
+      "duration": 1,
+      "error": {
+        "message": "connect ECONNREFUSED ::1:5000",
+        "stack": "Error: connect ECONNREFUSED ::1:5000\n    at AxiosError.from (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:857:14)\n    at RedirectableRequest.handleRequestError (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:3169:25)\n    at RedirectableRequest.emit (node:events:529:35)\n    at eventHandlers.<computed> (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/follow-redirects/index.js:49:24)\n    at ClientRequest.emit (node:events:517:28)\n    at Socket.socketErrorListener (node:_http_client:501:9)\n    at Socket.emit (node:events:517:28)\n    at emitErrorNT (node:internal/streams/destroy:151:8)\n    at emitErrorCloseNT (node:internal/streams/destroy:116:3)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)\n    at Axios.request (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:4258:41)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async /Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:163:24\n    at async runTest (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:62:5)\n    at async testTaskEndpoints (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:161:3)\n    at async runTests (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:251:5)"
+      }
+    },
+    {
+      "name": "タスクAPI - 特定タスク取得",
+      "status": "failure",
+      "duration": 1,
+      "error": {
+        "message": "connect ECONNREFUSED ::1:5000",
+        "stack": "Error: connect ECONNREFUSED ::1:5000\n    at AxiosError.from (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:857:14)\n    at RedirectableRequest.handleRequestError (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:3169:25)\n    at RedirectableRequest.emit (node:events:529:35)\n    at eventHandlers.<computed> (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/follow-redirects/index.js:49:24)\n    at ClientRequest.emit (node:events:517:28)\n    at Socket.socketErrorListener (node:_http_client:501:9)\n    at Socket.emit (node:events:517:28)\n    at emitErrorNT (node:internal/streams/destroy:151:8)\n    at emitErrorCloseNT (node:internal/streams/destroy:116:3)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)\n    at Axios.request (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:4258:41)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async /Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:188:24\n    at async runTest (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:62:5)\n    at async testTaskEndpoints (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:186:3)\n    at async runTests (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:251:5)"
+      }
+    },
+    {
+      "name": "チャットAPI - メッセージ送信",
+      "status": "failure",
+      "duration": 0,
+      "error": {
+        "message": "connect ECONNREFUSED ::1:5000",
+        "stack": "Error: connect ECONNREFUSED ::1:5000\n    at AxiosError.from (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:857:14)\n    at RedirectableRequest.handleRequestError (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:3169:25)\n    at RedirectableRequest.emit (node:events:529:35)\n    at eventHandlers.<computed> (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/follow-redirects/index.js:49:24)\n    at ClientRequest.emit (node:events:517:28)\n    at Socket.socketErrorListener (node:_http_client:501:9)\n    at Socket.emit (node:events:517:28)\n    at emitErrorNT (node:internal/streams/destroy:151:8)\n    at emitErrorCloseNT (node:internal/streams/destroy:116:3)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)\n    at Axios.request (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:4258:41)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async /Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:215:24\n    at async runTest (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:62:5)\n    at async testChatEndpoints (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:213:3)\n    at async runTests (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:252:5)"
+      }
+    }
+  ]
+}

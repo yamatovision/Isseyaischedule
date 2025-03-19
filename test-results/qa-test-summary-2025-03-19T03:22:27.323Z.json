@@ -1,0 +1,44 @@
+{
+  "timestamp": "2025-03-19T03:22:27.286Z",
+  "success": 6,
+  "failure": 0,
+  "skipped": 0,
+  "tests": [
+    {
+      "name": "認証API - ログインエンドポイント",
+      "status": "success",
+      "duration": 19,
+      "error": null
+    },
+    {
+      "name": "プロジェクトAPI - プロジェクト一覧取得",
+      "status": "success",
+      "duration": 5,
+      "error": null
+    },
+    {
+      "name": "プロジェクトAPI - 特定プロジェクト取得",
+      "status": "success",
+      "duration": 2,
+      "error": null
+    },
+    {
+      "name": "タスクAPI - プロジェクト内タスク一覧取得",
+      "status": "success",
+      "duration": 2,
+      "error": null
+    },
+    {
+      "name": "タスクAPI - 特定タスク取得",
+      "status": "success",
+      "duration": 3,
+      "error": null
+    },
+    {
+      "name": "チャットAPI - メッセージ送信",
+      "status": "success",
+      "duration": 4,
+      "error": null
+    }
+  ]
+}

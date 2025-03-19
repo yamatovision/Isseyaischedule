@@ -21,20 +21,11 @@ const api = axios.create({
   withCredentials: true // クッキーを常に送受信するように設定
 });
 
-// モックモードを完全に廃止
+// モックモードは無効化していますが、変数は残しておく
 const MOCK_MODE = false;
-// 疑似遅延設定（廃止）
-const API_DELAY = 0;
-
-/**
- * APIレスポンスのモック遅延処理
- * @param {Object} mockResponse - モックレスポンス
- * @returns {Promise} 遅延後のレスポンスを返すPromise
- */
+// ダミーのmockDelay関数（互換性のため）
 const mockDelay = (mockResponse) => {
-  return new Promise(resolve => {
-    setTimeout(() => resolve(mockResponse), API_DELAY || 500);
-  });
+  return Promise.resolve(mockResponse);
 };
 
 /**
@@ -364,16 +355,59 @@ export const getUpcomingTasks = async () => {
     const response = await api.get('/api/v1/projects/tasks/upcoming');
     console.log('【API連携】直近のタスク一覧APIレスポンス:', response.data);
     
-    // レスポンスデータ構造の確認とデバッグ
-    if (response.data.tasks) {
-      console.log(`【API連携】直近のタスク取得件数: ${response.data.tasks.length}件`);
+    // レスポンスデータ構造の詳細を表示
+    console.log('【API連携】レスポンス構造:', JSON.stringify(response.data, null, 2));
+    
+    // 様々な可能性のあるレスポンス形式に対応
+    let tasksArray = [];
+    
+    // 可能性のあるすべての形式をチェック
+    if (Array.isArray(response.data)) {
+      // レスポンスが直接配列の場合
+      tasksArray = response.data;
+    } else if (response.data && Array.isArray(response.data.tasks)) {
+      // {tasks: [...]} 形式
+      tasksArray = response.data.tasks;
+    } else if (response.data && response.data.data && Array.isArray(response.data.data.tasks)) {
+      // {data: {tasks: [...]}} 形式
+      tasksArray = response.data.data.tasks;
+    } else if (response.data && response.data.success === true && Array.isArray(response.data.result)) {
+      // {success: true, result: [...]} 形式
+      tasksArray = response.data.result; 
     }
     
-    return response.data;
+    // タスクが見つかったか確認
+    if (tasksArray && tasksArray.length > 0) {
+      console.log(`【API連携】直近のタスク取得件数: ${tasksArray.length}件`);
+      
+      // 正規化してからタスクを返す
+      const normalizedTasks = tasksArray.map(task => {
+        if (!task) return null;
+        
+        return {
+          id: task._id || task.id || '',
+          title: task.title || '無題のタスク',
+          description: task.description || '',
+          dueDate: task.dueDate || task.endDate || new Date().toISOString(),
+          priority: task.priority || 'medium',
+          status: task.status || 'not-started',
+          completed: task.status === 'completed',
+          project: task.projectTitle || task.planTitle || '',
+          projectId: task.projectId || task.planId || ''
+        };
+      }).filter(Boolean); // nullを除去
+      
+      return {
+        tasks: normalizedTasks
+      };
+    } else {
+      console.log('【API連携】タスクが見つかりませんでした');
+      return { tasks: [] };
+    }
   } catch (error) {
     console.error('【API連携エラー】直近の期限タスク一覧の取得に失敗しました', error);
     // エラー時は空の配列を返す
-    return { data: { tasks: [] } };
+    return { tasks: [] };
   }
 };
 

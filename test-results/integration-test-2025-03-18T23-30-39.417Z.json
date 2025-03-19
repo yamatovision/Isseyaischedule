@@ -1,0 +1,40 @@
+{
+  "timestamp": "2025-03-18T23:30:39.417Z",
+  "frontendUrl": "http://localhost:3000",
+  "apiUrl": "http://localhost:5000/api/v1",
+  "results": [
+    {
+      "test": "新規ユーザー登録",
+      "success": false,
+      "message": "例外が発生しました: Waiting for selector `button, a[href=\"/register\"], a:contains(\"新規登録\")` failed: Waiting failed: 5000ms exceeded",
+      "timestamp": "2025-03-18T23:30:27.458Z",
+      "details": null
+    },
+    {
+      "test": "ログアウト",
+      "success": false,
+      "message": "ログアウトボタンが見つかりませんでした",
+      "timestamp": "2025-03-18T23:30:32.555Z",
+      "details": null
+    },
+    {
+      "test": "ログイン",
+      "success": false,
+      "message": "例外が発生しました: page.waitForTimeout is not a function",
+      "timestamp": "2025-03-18T23:30:34.288Z",
+      "details": null
+    },
+    {
+      "test": "ログアウト",
+      "success": false,
+      "message": "ログアウトボタンが見つかりませんでした",
+      "timestamp": "2025-03-18T23:30:39.416Z",
+      "details": null
+    }
+  ],
+  "summary": {
+    "total": 4,
+    "passed": 0,
+    "failed": 4
+  }
+}

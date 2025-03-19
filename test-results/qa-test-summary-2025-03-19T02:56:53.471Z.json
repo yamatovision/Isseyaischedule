@@ -1,0 +1,59 @@
+{
+  "timestamp": "2025-03-19T02:56:53.373Z",
+  "success": 1,
+  "failure": 5,
+  "skipped": 0,
+  "tests": [
+    {
+      "name": "認証API - ログインエンドポイント",
+      "status": "success",
+      "duration": 87,
+      "error": null
+    },
+    {
+      "name": "プロジェクトAPI - プロジェクト一覧取得",
+      "status": "failure",
+      "duration": 2,
+      "error": {
+        "message": "Request failed with status code 401",
+        "stack": "AxiosError: Request failed with status code 401\n    at settle (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:2031:12)\n    at IncomingMessage.handleStreamEnd (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:3148:11)\n    at IncomingMessage.emit (node:events:519:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)\n    at Axios.request (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:4258:41)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:114:24\n    at async runTest (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:62:5)\n    at async testProjectEndpoints (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:112:3)\n    at async runTests (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:253:5)"
+      }
+    },
+    {
+      "name": "プロジェクトAPI - 特定プロジェクト取得",
+      "status": "failure",
+      "duration": 1,
+      "error": {
+        "message": "Request failed with status code 401",
+        "stack": "AxiosError: Request failed with status code 401\n    at settle (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:2031:12)\n    at IncomingMessage.handleStreamEnd (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:3148:11)\n    at IncomingMessage.emit (node:events:519:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)\n    at Axios.request (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:4258:41)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:136:24\n    at async runTest (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:62:5)\n    at async testProjectEndpoints (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:134:3)\n    at async runTests (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:253:5)"
+      }
+    },
+    {
+      "name": "タスクAPI - プロジェクト内タスク一覧取得",
+      "status": "failure",
+      "duration": 1,
+      "error": {
+        "message": "Request failed with status code 401",
+        "stack": "AxiosError: Request failed with status code 401\n    at settle (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:2031:12)\n    at IncomingMessage.handleStreamEnd (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:3148:11)\n    at IncomingMessage.emit (node:events:519:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)\n    at Axios.request (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:4258:41)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:165:24\n    at async runTest (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:62:5)\n    at async testTaskEndpoints (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:163:3)\n    at async runTests (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:254:5)"
+      }
+    },
+    {
+      "name": "タスクAPI - 特定タスク取得",
+      "status": "failure",
+      "duration": 2,
+      "error": {
+        "message": "Request failed with status code 401",
+        "stack": "AxiosError: Request failed with status code 401\n    at settle (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:2031:12)\n    at IncomingMessage.handleStreamEnd (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:3148:11)\n    at IncomingMessage.emit (node:events:519:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)\n    at Axios.request (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:4258:41)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:191:24\n    at async runTest (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:62:5)\n    at async testTaskEndpoints (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:189:3)\n    at async runTests (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:254:5)"
+      }
+    },
+    {
+      "name": "チャットAPI - メッセージ送信",
+      "status": "failure",
+      "duration": 2,
+      "error": {
+        "message": "Request failed with status code 401",
+        "stack": "AxiosError: Request failed with status code 401\n    at settle (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:2031:12)\n    at IncomingMessage.handleStreamEnd (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:3148:11)\n    at IncomingMessage.emit (node:events:519:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)\n    at Axios.request (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:4258:41)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:218:24\n    at async runTest (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:62:5)\n    at async testChatEndpoints (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:216:3)\n    at async runTests (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:255:5)"
+      }
+    }
+  ]
+}

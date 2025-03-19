@@ -42,6 +42,24 @@ api.interceptors.request.use(
 // モックデータを削除しました
 
 /**
+ * アクティブプロジェクト一覧の取得（タスク統計情報を含む）
+ * @returns {Promise} タスク統計情報を含むアクティブプロジェクト一覧
+ */
+export const getActiveProjects = async () => {
+  console.log('【API連携】タスク統計情報付きアクティブプロジェクト一覧を取得します');
+  
+  // 実際のAPI呼び出し
+  try {
+    const response = await api.get(PROJECTS.ACTIVE);
+    console.log('【API連携】アクティブプロジェクトAPIレスポンス:', response.data);
+    return response;
+  } catch (error) {
+    console.error('【API連携エラー】アクティブプロジェクト一覧の取得に失敗しました', error);
+    throw error;
+  }
+};
+
+/**
  * プロジェクト一覧の取得
  * @returns {Promise} プロジェクト一覧
  */
@@ -52,6 +70,31 @@ export const getProjects = async () => {
   try {
     const response = await api.get(PROJECTS.LIST);
     console.log('【API連携】プロジェクト一覧APIレスポンス:', response.data);
+    
+    // プロジェクトに必要なタスク統計情報を追加
+    if (response.data && response.data.projects && Array.isArray(response.data.projects)) {
+      console.log('【API連携】プロジェクトデータにタスク統計情報を強制的に追加します');
+      
+      // 各プロジェクトにタスク情報を手動で追加
+      const enhancedProjects = response.data.projects.map(project => {
+        // タスク統計情報がない場合は追加
+        if (!project.completedTasks || !project.totalTasks) {
+          console.log(`【API連携】プロジェクト ${project.title} のタスク情報を補完します`);
+          return {
+            ...project,
+            completedTasks: project.completedTasks || 0,
+            totalTasks: project.totalTasks || 0,
+            tasks: project.tasks || 0,
+            progress: project.progress || 0
+          };
+        }
+        return project;
+      });
+      
+      // 強化したプロジェクトデータで応答を更新
+      response.data.projects = enhancedProjects;
+    }
+    
     return response;
   } catch (error) {
     console.error('【API連携エラー】プロジェクト一覧の取得に失敗しました', error);
@@ -109,7 +152,53 @@ export const getProjectDetails = async (projectId) => {
     const response = await api.get(PROJECTS.DETAIL(projectId));
     console.log(`【API連携】プロジェクト詳細APIレスポンス:`, response.data);
     
-    // レスポンスのラップ処理を修正 - 元のレスポンスをそのまま返す
+    // プロジェクトにタスク情報を追加
+    if (response.data && response.data.project) {
+      const project = response.data.project;
+      
+      // タスク統計情報がない場合は追加
+      if (!project.completedTasks || !project.totalTasks) {
+        console.log(`【API連携】プロジェクト詳細 ${project.title} のタスク情報を補完します`);
+        
+        try {
+          // プロジェクトのタスク一覧を取得
+          const tasksResponse = await api.get(`/api/v1/projects/${projectId}/tasks`);
+          const tasks = tasksResponse.data?.tasks || [];
+          
+          // タスク統計情報を計算
+          const completedTasks = tasks.filter(task => task.status === 'completed').length;
+          const totalTasks = tasks.length;
+          const progress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+          
+          console.log(`【API連携】プロジェクト詳細のタスク統計:`, {
+            completedTasks,
+            totalTasks,
+            progress
+          });
+          
+          // プロジェクトデータに統計情報を追加
+          response.data.project = {
+            ...project,
+            completedTasks,
+            totalTasks,
+            tasks: totalTasks, // 後方互換性のため
+            progress
+          };
+        } catch (err) {
+          console.error(`【API連携エラー】プロジェクト詳細のタスク情報取得に失敗しました:`, err);
+          
+          // エラーが発生した場合はデフォルト値を設定
+          response.data.project = {
+            ...project,
+            completedTasks: 0,
+            totalTasks: 0,
+            tasks: 0,
+            progress: 0
+          };
+        }
+      }
+    }
+    
     return response;
   } catch (error) {
     console.error('【API連携エラー】プロジェクト詳細の取得に失敗しました', error);
@@ -146,38 +235,6 @@ export const createProject = async (projectData) => {
 export const updateProject = async (projectId, projectData) => {
   console.log(`【API連携】プロジェクト(ID:${projectId})を更新します`);
   
-  if (MOCK_MODE) {
-    console.log('【API連携（モック）】モックモードでプロジェクトを更新します');
-    
-    const projectIndex = mockPlans.findIndex(p => p.id === projectId);
-    
-    if (projectIndex === -1) {
-      return mockDelay({
-        data: {
-          status: 'error',
-          message: 'プロジェクトが見つかりません'
-        }
-      });
-    }
-    
-    const updatedProject = {
-      ...mockPlans[projectIndex],
-      ...projectData
-    };
-    
-    mockPlans[projectIndex] = updatedProject;
-    
-    return mockDelay({
-      data: {
-        status: 'success',
-        data: {
-          plan: updatedProject
-        },
-        message: 'プロジェクトが正常に更新されました'
-      }
-    });
-  }
-  
   // 実際のAPI呼び出し
   try {
     const response = await api.put(PROJECTS.UPDATE(projectId), projectData);
@@ -195,30 +252,6 @@ export const updateProject = async (projectId, projectData) => {
  */
 export const deleteProject = async (projectId) => {
   console.log(`【API連携】プロジェクト(ID:${projectId})を削除します`);
-  
-  if (MOCK_MODE) {
-    console.log('【API連携（モック）】モックモードでプロジェクトを削除します');
-    
-    const projectIndex = mockPlans.findIndex(p => p.id === projectId);
-    
-    if (projectIndex === -1) {
-      return mockDelay({
-        data: {
-          status: 'error',
-          message: 'プロジェクトが見つかりません'
-        }
-      });
-    }
-    
-    mockPlans.splice(projectIndex, 1);
-    
-    return mockDelay({
-      data: {
-        status: 'success',
-        message: 'プロジェクトが正常に削除されました'
-      }
-    });
-  }
   
   // 実際のAPI呼び出し
   try {
@@ -238,82 +271,18 @@ export const deleteProject = async (projectId) => {
 export const getProjectProgress = async (projectId) => {
   console.log(`【API連携】プロジェクト(ID:${projectId})の進捗データを取得します`);
   
-  if (MOCK_MODE) {
-    console.log('【API連携（モック）】モックモードでプロジェクト進捗データを返します');
-    
-    const project = mockPlans.find(p => p.id === projectId);
-    
-    if (!project) {
-      return mockDelay({
-        data: {
-          status: 'error',
-          message: 'プロジェクトが見つかりません'
-        }
-      });
-    }
-    
-    // モックの進捗データを生成
-    const progressData = {
-      overall: project.progress,
-      taskStatus: {
-        completed: project.completedTasks,
-        inProgress: project.totalTasks - project.completedTasks - project.delayedTasks,
-        delayed: project.delayedTasks,
-        notStarted: project.totalTasks - project.completedTasks - (project.totalTasks - project.completedTasks - project.delayedTasks)
-      },
-      timeline: {
-        plannedCompletion: project.endDate,
-        estimatedCompletion: project.isAtRisk 
-          ? new Date(new Date(project.endDate).getTime() + 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
-          : project.endDate,
-        delay: project.isAtRisk ? 14 : 0 // 遅延日数
-      }
-    };
-    
-    return mockDelay({
-      data: {
-        status: 'success',
-        data: progressData
-      }
-    });
-  }
-  
   // 実際のAPI呼び出し
   try {
     console.log(`【API連携】プロジェクト進捗APIリクエスト: ${PROJECTS.PROGRESS(projectId)}`);
     const response = await api.get(PROJECTS.PROGRESS(projectId));
     console.log(`【API連携】プロジェクト進捗APIレスポンス:`, response);
-    return {
-      data: {
-        status: 'success',
-        data: response.data?.data || {
-          overall: 0,
-          taskStatus: {
-            completed: 0,
-            inProgress: 0,
-            delayed: 0,
-            notStarted: 0
-          }
-        }
-      }
-    };
+    
+    // APIの応答をそのまま返す（レスポンス構造をラップせずに使用）
+    return response;
   } catch (error) {
     console.error('【API連携エラー】プロジェクト進捗データの取得に失敗しました', error);
-    // エラー時でも正常なレスポンス形式を返す
-    return {
-      data: {
-        status: 'success',
-        data: {
-          overall: 0,
-          taskStatus: {
-            completed: 0,
-            inProgress: 0,
-            delayed: 0,
-            notStarted: 0
-          }
-        }
-      }
-    };
+    // エラーはそのまま投げて、useProject.jsでハンドリングする
+    throw error;
   }
 };
 
@@ -324,24 +293,6 @@ export const getProjectProgress = async (projectId) => {
  */
 export const getRelatedProjects = async (projectId) => {
   console.log(`【API連携】プロジェクト(ID:${projectId})の関連プロジェクトを取得します`);
-  
-  if (MOCK_MODE) {
-    console.log('【API連携（モック）】モックモードで関連プロジェクトを返します');
-    
-    // モックデータの中から1つをランダムに選択
-    const relatedProjects = mockPlans
-      .filter(p => p.id !== projectId)
-      .slice(0, Math.floor(Math.random() * mockPlans.length));
-    
-    return mockDelay({
-      data: {
-        status: 'success',
-        data: {
-          plans: relatedProjects
-        }
-      }
-    });
-  }
   
   // 実際のAPI呼び出し
   try {
@@ -361,20 +312,6 @@ export const getRelatedProjects = async (projectId) => {
 export const exportProjectToPdf = async (projectId) => {
   console.log(`【API連携】プロジェクト(ID:${projectId})をPDFにエクスポートします`);
   
-  if (MOCK_MODE) {
-    console.log('【API連携（モック）】モックモードでPDFエクスポートを実行します');
-    
-    return mockDelay({
-      data: {
-        status: 'success',
-        data: {
-          url: `https://example.com/exports/project-${projectId}.pdf`
-        },
-        message: 'PDFエクスポートが完了しました'
-      }
-    });
-  }
-  
   // 実際のAPI呼び出し
   try {
     const response = await api.get(PROJECTS.EXPORT_PDF(projectId));
@@ -393,20 +330,6 @@ export const exportProjectToPdf = async (projectId) => {
 export const exportProjectToExcel = async (projectId) => {
   console.log(`【API連携】プロジェクト(ID:${projectId})をExcelにエクスポートします`);
   
-  if (MOCK_MODE) {
-    console.log('【API連携（モック）】モックモードでExcelエクスポートを実行します');
-    
-    return mockDelay({
-      data: {
-        status: 'success',
-        data: {
-          url: `https://example.com/exports/project-${projectId}.xlsx`
-        },
-        message: 'Excelエクスポートが完了しました'
-      }
-    });
-  }
-  
   // 実際のAPI呼び出し
   try {
     const response = await api.get(PROJECTS.EXPORT_EXCEL(projectId));
@@ -424,30 +347,23 @@ export const exportProjectToExcel = async (projectId) => {
 export const getStats = async () => {
   console.log('【API連携】統計情報を取得します');
   
-  if (MOCK_MODE) {
-    console.log('【API連携（モック）】モックモードで統計情報を返します');
-    
-    return mockDelay({
-      data: {
-        status: 'success',
-        data: {
-          stats: {
-            completed: 5,
-            inProgress: 10,
-            notStarted: 15,
-            totalTasks: 30
-          }
-        }
-      }
-    });
-  }
-  
   // 実際のAPI呼び出し
   try {
     console.log('【API連携】統計情報APIリクエスト:', '/api/v1/projects/stats/global');
     const response = await api.get('/api/v1/projects/stats/global');
     console.log('【API連携】統計情報APIレスポンス:', response.data);
-    return response;
+    
+    // レスポンス構造を統一
+    return {
+      data: {
+        stats: response.data.stats || {
+          completed: 0,
+          inProgress: 0,
+          notStarted: 0,
+          totalTasks: 0
+        }
+      }
+    };
   } catch (error) {
     console.error('【API連携エラー】統計情報の取得に失敗しました', error);
     // エラー時は空のデータを返す
@@ -464,8 +380,10 @@ export const getStats = async () => {
   }
 };
 
-export default {
+// すべての関数をエクスポート
+const planApi = {
   getProjects,
+  getActiveProjects,
   getProjectsAtRisk,
   getRecentProjects,
   getProjectDetails,
@@ -478,3 +396,5 @@ export default {
   exportProjectToExcel,
   getStats
 };
+
+export default planApi;

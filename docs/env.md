@@ -30,12 +30,12 @@
 [x] `REACT_APP_WEBSOCKET_URL` - リアルタイム更新用WebSocketサーバーURL
 
 ## CI/CD用環境変数
-[ ] `GITHUB_TOKEN` - GitHub Actions用トークン
-[ ] `VERCEL_TOKEN` - Vercel用デプロイトークン
-[ ] `VERCEL_ORG_ID` - Vercel組織ID
-[ ] `VERCEL_PROJECT_ID` - Vercelプロジェクト
-[ ] `MONGODB_URI_PRODUCTION` - 本番環境のMongoDB接続URI
-[ ] `MONGODB_URI_STAGING` - ステージング環境のMongoDB接続URI
+[x] `GITHUB_TOKEN` - GitHub Actions用トークン (GitHub上で自動設定)
+[x] `VERCEL_TOKEN` - Vercel用デプロイトークン (Vercelで自動設定)
+[x] `VERCEL_ORG_ID` - Vercel組織ID (Vercelで自動設定)
+[x] `VERCEL_PROJECT_ID` - Vercelプロジェクト (Vercelで自動設定)
+[x] `MONGODB_URI_PRODUCTION` - 本番環境のMongoDB接続URI (Railway環境変数で設定)
+[ ] `MONGODB_URI_STAGING` - ステージング環境のMongoDB接続URI (未設定・必要に応じて設定)
 
 ## 開発用環境変数
 [x] `MOCK_MODE` - APIモックモードの有効化（true/false）

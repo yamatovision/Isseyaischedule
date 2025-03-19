@@ -1,0 +1,53 @@
+{
+  "timestamp": "2025-03-19T03:19:11.756Z",
+  "success": 3,
+  "failure": 3,
+  "skipped": 0,
+  "tests": [
+    {
+      "name": "認証API - ログインエンドポイント",
+      "status": "success",
+      "duration": 26,
+      "error": null
+    },
+    {
+      "name": "プロジェクトAPI - プロジェクト一覧取得",
+      "status": "failure",
+      "duration": 7,
+      "error": {
+        "message": "Request failed with status code 500",
+        "stack": "AxiosError: Request failed with status code 500\n    at settle (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:2031:12)\n    at IncomingMessage.handleStreamEnd (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:3148:11)\n    at IncomingMessage.emit (node:events:529:35)\n    at endReadableNT (node:internal/streams/readable:1400:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)\n    at Axios.request (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:4258:41)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async /Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:121:24\n    at async runTest (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:69:5)\n    at async testProjectEndpoints (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:119:3)\n    at async runTests (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:260:5)"
+      }
+    },
+    {
+      "name": "プロジェクトAPI - 特定プロジェクト取得",
+      "status": "success",
+      "duration": 3,
+      "error": null
+    },
+    {
+      "name": "タスクAPI - プロジェクト内タスク一覧取得",
+      "status": "failure",
+      "duration": 6,
+      "error": {
+        "message": "Request failed with status code 400",
+        "stack": "AxiosError: Request failed with status code 400\n    at settle (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:2031:12)\n    at IncomingMessage.handleStreamEnd (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:3148:11)\n    at IncomingMessage.emit (node:events:529:35)\n    at endReadableNT (node:internal/streams/readable:1400:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)\n    at Axios.request (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:4258:41)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async /Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:172:24\n    at async runTest (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:69:5)\n    at async testTaskEndpoints (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:170:3)\n    at async runTests (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:261:5)"
+      }
+    },
+    {
+      "name": "タスクAPI - 特定タスク取得",
+      "status": "success",
+      "duration": 3,
+      "error": null
+    },
+    {
+      "name": "チャットAPI - メッセージ送信",
+      "status": "failure",
+      "duration": 4,
+      "error": {
+        "message": "Request failed with status code 500",
+        "stack": "AxiosError: Request failed with status code 500\n    at settle (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:2031:12)\n    at IncomingMessage.handleStreamEnd (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:3148:11)\n    at IncomingMessage.emit (node:events:529:35)\n    at endReadableNT (node:internal/streams/readable:1400:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)\n    at Axios.request (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/node_modules/axios/dist/node/axios.cjs:4258:41)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async /Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:225:24\n    at async runTest (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:69:5)\n    at async testChatEndpoints (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:223:3)\n    at async runTests (/Users/tatsuya/Desktop/システム開発/ProjectIssey/schedle/tests/qa/api-test.js:262:5)"
+      }
+    }
+  ]
+}

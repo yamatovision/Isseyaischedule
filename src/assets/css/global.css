@@ -1,0 +1,19 @@
+/* グローバルスタイル */
+body {
+  font-family: 'Roboto', 'Hiragino Sans', 'Meiryo', sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* ダークモード */
+.dark {
+  background-color: #212121;
+  color: #f3f4f6;
+}
+
+/* ライトモード */
+.light {
+  background-color: #f9fafb;
+  color: #1f2937;
+}

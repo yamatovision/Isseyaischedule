@@ -1,0 +1,46 @@
+{
+  "timestamp": "2025-03-18T23:20:20.216Z",
+  "apiUrl": "http://localhost:5000/api/v1",
+  "results": [
+    {
+      "test": "ログイン",
+      "success": false,
+      "message": "ログインエラー: connect ECONNREFUSED ::1:5000",
+      "timestamp": "2025-03-18T23:20:20.211Z",
+      "data": null
+    },
+    {
+      "test": "招待コード検証",
+      "success": false,
+      "message": "招待コード検証エラー: connect ECONNREFUSED ::1:5000",
+      "timestamp": "2025-03-18T23:20:20.213Z",
+      "data": null
+    },
+    {
+      "test": "ユーザー登録",
+      "success": false,
+      "message": "ユーザー登録エラー: connect ECONNREFUSED ::1:5000",
+      "timestamp": "2025-03-18T23:20:20.214Z",
+      "data": null
+    },
+    {
+      "test": "パスワードリセットリクエスト",
+      "success": false,
+      "message": "パスワードリセットリクエストエラー: connect ECONNREFUSED ::1:5000",
+      "timestamp": "2025-03-18T23:20:20.215Z",
+      "data": null
+    },
+    {
+      "test": "ログイン",
+      "success": false,
+      "message": "ログインエラー: connect ECONNREFUSED ::1:5000",
+      "timestamp": "2025-03-18T23:20:20.216Z",
+      "data": null
+    }
+  ],
+  "summary": {
+    "total": 5,
+    "passed": 0,
+    "failed": 5
+  }
+}
