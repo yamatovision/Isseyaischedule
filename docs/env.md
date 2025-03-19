@@ -35,7 +35,6 @@
 [x] `VERCEL_ORG_ID` - Vercel組織ID (Vercelで自動設定)
 [x] `VERCEL_PROJECT_ID` - Vercelプロジェクト (Vercelで自動設定)
 [x] `MONGODB_URI_PRODUCTION` - 本番環境のMongoDB接続URI (Railway環境変数で設定)
-[ ] `MONGODB_URI_STAGING` - ステージング環境のMongoDB接続URI (未設定・必要に応じて設定)
 
 ## 開発用環境変数
 [x] `MOCK_MODE` - APIモックモードの有効化（true/false）
