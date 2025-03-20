@@ -4,9 +4,9 @@
   "private": true,
   "homepage": ".",
   "scripts": {
-    "start": "node ./node_modules/@craco/craco/dist/bin/craco.js start",
-    "build": "DISABLE_ESLINT_PLUGIN=true CI=false NODE_ENV=production CRACO_CONFIG_PATH=./craco.config.js node ./node_modules/@craco/craco/dist/bin/craco.js build",
-    "test": "node ./node_modules/@craco/craco/dist/bin/craco.js test",
+    "start": "react-scripts start",
+    "build": "DISABLE_ESLINT_PLUGIN=true CI=false NODE_ENV=production react-scripts build",
+    "test": "react-scripts test",
     "eject": "react-scripts eject",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src --ext .js,.jsx",
