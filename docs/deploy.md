@@ -10,7 +10,7 @@
 
 | コンポーネント | 使用プラットフォーム | URL |
 |--------------|-------------------|-------------|
-| フロントエンド | Vercel            | https://isseyaischedule-dw8ge0s5o-yamatovisions-projects.vercel.app |
+| フロントエンド | Firebase Hosting  | https://plannavi.web.app |
 | バックエンド   | Railway           | https://isseyaischedule-production.up.railway.app |
 | データベース   | MongoDB Atlas     | MongoDB Atlas Cluster |
 
@@ -18,39 +18,107 @@
 
 | コンポーネント | 推奨プラットフォーム | 代替オプション |
 |--------------|-------------------|-------------|
-| フロントエンド | Vercel            | Netlify, Firebase Hosting |
+| フロントエンド | Firebase Hosting  | Vercel, Netlify |
 | バックエンド   | Railway           | Heroku, Render, AWS Elastic Beanstalk |
 | データベース   | MongoDB Atlas     | AWS DocumentDB, CosmosDB |
 | 画像/ファイル  | AWS S3           | Cloudinary, Firebase Storage |
 
-## フロントエンドのデプロイ (Vercel) - 完了
+## フロントエンドのデプロイ (Firebase Hosting)
 
-Vercelは、React/Vue/Angular等のフロントエンドアプリケーションのデプロイに最適化されたプラットフォームです。
+Firebase Hostingは、静的ウェブサイトやSPAのデプロイに最適化されたGoogleのホスティングサービスです。Reactアプリケーションのデプロイに適しており、シンプルで安定した環境を提供します。
 
 ### 前提条件
 - GitHubアカウント
-- Vercelアカウント（GitHubアカウントで登録可能）
+- Googleアカウント/Firebaseアカウント
+- Node.js環境
 
-### デプロイ手順 (完了済み)
+### デプロイ手順
 
-1. [Vercel](https://vercel.com/)にログインする
-2. 「New Project」をクリック
-3. GitHubからリポジトリをインポート
-4. プロジェクト設定の構成:
-   - **Framework Preset**: React
-   - **Root Directory**: `/` (プロジェクトルートの場合) または特定のディレクトリを指定
-   - **Build Command**: `npm run build`
-   - **Output Directory**: `build`
+1. **Firebase CLIのインストール**:
+   ```bash
+   npm install -g firebase-tools
+   ```
 
-5. 環境変数の設定:
-   - `REACT_APP_API_URL`: バックエンドAPIのURL (https://isseyaischedule-production.up.railway.app/api/v1)
-   - 他の必要な環境変数を追加
+2. **Firebaseにログイン**:
+   ```bash
+   firebase login
+   ```
 
-6. 「Deploy」をクリック
+3. **プロジェクトディレクトリに移動**:
+   ```bash
+   cd frontend
+   ```
 
-### 自動デプロイの設定 (完了済み)
+4. **Firebase初期化**:
+   ```bash
+   firebase init hosting
+   ```
+   設定オプション:
+   - 既存プロジェクトを選択（aicontentsfactory-b730e）
+   - 公開ディレクトリ: `build`
+   - シングルページアプリケーション: `Yes`
+   - GitHubとの自動デプロイ: 任意
 
-GitHubリポジトリとの連携により、mainブランチへのプッシュ時に自動デプロイが実行されます。
+5. **ホスティングサイトの作成**（カスタムURLを使用する場合）:
+   ```bash
+   firebase hosting:sites:create plannavi
+   firebase target:apply hosting plannavi plannavi
+   ```
+
+6. **firebase.jsonの設定**:
+   ```json
+   {
+     "hosting": [
+       {
+         "target": "plannavi",
+         "public": "build",
+         "ignore": [
+           "firebase.json",
+           "**/.*",
+           "**/node_modules/**"
+         ],
+         "rewrites": [
+           {
+             "source": "**",
+             "destination": "/index.html"
+           }
+         ]
+       }
+     ]
+   }
+   ```
+
+7. **アプリケーションのビルド**:
+   ```bash
+   npm run build
+   ```
+
+8. **デプロイ実行**:
+   ```bash
+   firebase deploy --only hosting:plannavi
+   ```
+
+9. **完了**: デプロイが成功すると、`https://plannavi.web.app` でアプリケーションにアクセス可能
+
+### カスタムデプロイスクリプト
+
+package.jsonに以下のスクリプトを追加すると便利です:
+
+```json
+"scripts": {
+  "deploy": "npm run build && firebase deploy --only hosting:plannavi"
+}
+```
+
+これにより、`npm run deploy`コマンド一つでビルドとデプロイが実行できます。
+
+### Firebaseホスティングの利点
+
+1. **高速CDN**: Googleのグローバルエッジネットワークを活用
+2. **自動HTTPS**: SSL証明書の自動発行と更新
+3. **シンプルなデプロイフロー**: CLIによる簡単なデプロイプロセス
+4. **複数環境**: 1つのプロジェクト内で複数のサイトをホスティング可能
+5. **カスタムドメイン**: 独自ドメインの簡単な設定
 
 ## バックエンドのデプロイ (Railway) - 完了
 
@@ -76,7 +144,7 @@ Railwayは、Node.jsアプリケーションのデプロイに特化した、シ
    JWT_EXPIRES_IN=1d
    REFRESH_TOKEN_SECRET=<secret>
    REFRESH_TOKEN_EXPIRES_IN=7d
-   CORS_ORIGIN=https://isseyaischedule-dw8ge0s5o-yamatovisions-projects.vercel.app
+   CORS_ORIGIN=https://plannavi.web.app
    EMAIL_SERVICE=gmail
    EMAIL_API_KEY=<app-password>
    EMAIL_FROM=your-email@gmail.com
@@ -159,6 +227,27 @@ jobs:
 ### データベース
 - [x] 接続設定が正しく構成されている
 
+## Vercelからの移行
+
+当初はVercelを使用していましたが、以下の理由からFirebase Hostingへ移行しました：
+
+### 移行の理由
+1. **設定の複雑さ**: Vercelではmonoレポ構造でのフロントエンド設定に問題があった
+2. **ビルドエラー**: CRACOやTypeScript設定の競合によるビルド失敗が頻発
+3. **デプロイの不安定さ**: 同じコードでも時々デプロイが失敗する問題があった
+
+### Firebase Hostingのメリット
+1. **シンプルなワークフロー**: 直感的なコマンドと明確なエラーメッセージ
+2. **安定したビルド環境**: 一貫した動作を提供
+3. **マルチサイト対応**: 1つのプロジェクトで複数のサイト（開発・ステージング・本番など）を管理可能
+4. **高速なCDN**: Googleのグローバルネットワークによる高速配信
+
+### CORS設定の更新
+バックエンド側のCORS設定を更新し、新しいフロントエンドのドメイン（plannavi.web.app）からのリクエストを許可するよう変更しました：
+```
+CORS_ORIGIN=https://plannavi.web.app
+```
+
 ## トラブルシューティング
 
 ### 一般的な問題
@@ -176,9 +265,14 @@ jobs:
    - 依存関係が正しくインストールされているか確認
    - ノードバージョンの互換性を確認
 
+4. **Firebase特有の問題**
+   - ホスティングサイトのURLが正しいか確認
+   - firebase.jsonのターゲット設定が正しいか確認
+   - .firebasercファイルのプロジェクトとターゲットの設定を確認
+
 ### ログの確認
 
-- **Vercel**: プロジェクトダッシュボード → Deployments → ビルドを選択 → Logs
+- **Firebase**: Firebase Console → Hosting → ホスティング履歴 → 詳細
 - **Railway**: プロジェクトダッシュボード → Deployments → デプロイを選択 → Logs
 - **MongoDB Atlas**: Clusters → ... → Logs
 
@@ -197,3 +291,4 @@ jobs:
 2. 自動テストの強化
 3. モニタリングとアラートの設定
 4. バックアップ戦略の実装
+5. Firebase Hostingとの自動デプロイパイプラインの最適化
