@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { getToken, setToken, removeToken } from '../utils/auth.js';
+// auth.js が存在することを明示的に示すため、相対パスを完全に指定
+import { getToken, setToken, removeToken } from '../utils/auth';
 
 // API呼び出しをインポート
 import { login, register, logout, getProfile } from '../api/authApi';

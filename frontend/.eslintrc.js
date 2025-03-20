@@ -22,9 +22,10 @@ module.exports = {
     "import"
   ],
   rules: {
-    "import/extensions": ["error", "always", {
-      "js": "always",
-      "jsx": "always"
+    "import/extensions": ["error", "never", {
+      "css": "always",
+      "svg": "always",
+      "json": "always"
     }],
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off"
