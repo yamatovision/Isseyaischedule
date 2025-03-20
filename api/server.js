@@ -1,3 +1,6 @@
+// 環境変数を最初にロード
+require('dotenv').config();
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -8,7 +11,6 @@ const authRoutes = require('./routes/authRoutes');
 const projectRoutes = require('./routes/projectRoutes');
 const taskRoutes = require('./routes/taskRoutes');
 const chatRoutes = require('./routes/chatRoutes');
-require('dotenv').config();
 
 /**
  * API サーバーメインファイル
@@ -84,29 +86,44 @@ const connectDB = async () => {
     const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/plannavi';
     await mongoose.connect(mongoURI);
     console.log('MongoDB接続成功');
+    return true;
   } catch (error) {
     console.error('MongoDB接続エラー:', error);
-    // 本番環境では接続失敗時にプロセスを終了
-    if (process.env.NODE_ENV === 'production') {
-      console.error('MongoDB接続に失敗したため、サーバーを終了します');
-      process.exit(1);
+    
+    // 本番環境でもサーバーを起動して、ヘルスチェックに応答できるようにする
+    console.warn('MongoDB接続に失敗しましたが、サーバーは起動を継続します');
+    
+    // エラーを上位に伝播させるが、致命的ではない
+    if (process.env.NODE_ENV !== 'production') {
+      throw error;
     }
+    
+    return false;
   }
 };
 
 // サーバー起動機能
-const PORT = process.env.API_PORT || 5000;
+const PORT = process.env.PORT || process.env.API_PORT || 5000;
 
 // サーバー起動関数
-const startServer = () => {
-  // サーバーを直接起動する
-  connectDB().then(() => {
+const startServer = async () => {
+  try {
+    // MongoDB接続を待機
+    await connectDB();
+    
+    // サーバーを起動
     app.listen(PORT, () => {
       console.log(`サーバー起動: ポート ${PORT}`);
       console.log(`API エンドポイント: ${API_BASE_PATH}`);
       console.log(`環境: ${process.env.NODE_ENV || 'development'}`);
     });
-  });
+  } catch (error) {
+    console.error('サーバー起動エラー:', error);
+    // 本番環境では終了させない（Railwayのヘルスチェックに対応するため）
+    if (process.env.NODE_ENV === 'development') {
+      process.exit(1);
+    }
+  }
 };
 
 // サーバー起動処理の実行
