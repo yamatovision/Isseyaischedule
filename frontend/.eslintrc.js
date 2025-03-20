@@ -1,27 +1,27 @@
-{
-  "env": {
-    "browser": true,
-    "es2021": true,
-    "node": true
+module.exports = {
+  env: {
+    browser: true,
+    es2021: true,
+    node: true
   },
-  "extends": [
+  extends: [
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:import/errors",
     "plugin:import/warnings"
   ],
-  "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true
     },
-    "ecmaVersion": 12,
-    "sourceType": "module"
+    ecmaVersion: 12,
+    sourceType: "module"
   },
-  "plugins": [
+  plugins: [
     "react",
     "import"
   ],
-  "rules": {
+  rules: {
     "import/extensions": ["error", "always", {
       "js": "always",
       "jsx": "always"
@@ -29,9 +29,9 @@
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off"
   },
-  "settings": {
-    "react": {
-      "version": "detect"
+  settings: {
+    react: {
+      version: "detect"
     }
   }
 }
