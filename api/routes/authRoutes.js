@@ -5,6 +5,11 @@ const authMiddleware = require('../middleware/auth');
 
 const router = express.Router();
 
+// ヘルスチェックエンドポイント
+router.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok', message: 'API is running' });
+});
+
 /**
  * 認証関連ルート定義
  * 
