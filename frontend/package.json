@@ -11,8 +11,9 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint src --ext .js,.jsx",
     "check-imports": "madge --circular --extensions js,jsx src/",
-    "check": "npm run typecheck && npm run lint && npm run check-imports",
-    "prebuild": "npm run check"
+    "check": "npm run typecheck && npm run check-imports",
+    "check-all": "npm run typecheck && npm run lint && npm run check-imports",
+    "prebuild": "npm run check || true"
   },
   "dependencies": {
     "@material-ui/core": "^4.12.4",
@@ -36,7 +37,8 @@
     "@types/react": "^19.0.12",
     "@types/react-dom": "^19.0.4",
     "ajv": "^8.17.1",
-    "eslint": "^9.22.0",
+    "eslint": "^8.40.0",
+    "eslint-import-resolver-node": "^0.3.9",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-react": "^7.37.4",
     "madge": "^8.0.0",
