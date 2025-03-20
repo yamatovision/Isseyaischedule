@@ -56,10 +56,16 @@ app.get(`${API_BASE_PATH}/health`, (req, res) => {
 // ルートエンドポイント
 app.get('/', (req, res) => {
   res.status(200).json({
+    status: 'ok',
     message: 'プランナビ API サーバー',
     version: API_VERSION,
     documentation: '/api-docs'
   });
+});
+
+// ルートパスのヘルスチェック（Railwayのデフォルトヘルスチェック対応）
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
 // エラーハンドリングミドルウェア
