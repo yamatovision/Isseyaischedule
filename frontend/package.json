@@ -8,6 +8,8 @@
     "build": "DISABLE_ESLINT_PLUGIN=true CI=false NODE_ENV=production react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "deploy": "npm run build && firebase deploy --only hosting",
+    "firebase-init": "firebase init hosting",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src --ext .js,.jsx",
     "check-imports": "madge --circular --extensions js,jsx src/",
