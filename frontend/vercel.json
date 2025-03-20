@@ -1,5 +1,5 @@
 {
-  "buildCommand": "DISABLE_ESLINT_PLUGIN=true CI=false NODE_ENV=production node ./node_modules/@craco/craco/dist/bin/craco.js build",
+  "buildCommand": "DISABLE_ESLINT_PLUGIN=true CI=false NODE_ENV=production react-scripts build",
   "outputDirectory": "build",
   "installCommand": "npm install --legacy-peer-deps",
   "rewrites": [

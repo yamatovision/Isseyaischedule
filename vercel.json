@@ -1,7 +1,7 @@
 {
-  "buildCommand": "cp .cracorc.js frontend/ && cd frontend && DISABLE_ESLINT_PLUGIN=true CI=false NODE_ENV=production npm run build",
-  "outputDirectory": "frontend/build",
-  "installCommand": "cd frontend && npm install --legacy-peer-deps",
+  "buildCommand": "DISABLE_ESLINT_PLUGIN=true CI=false NODE_ENV=production react-scripts build",
+  "outputDirectory": "build",
+  "installCommand": "npm install --legacy-peer-deps",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ],
