@@ -7,7 +7,12 @@
     "start": "react-scripts start",
     "build": "CI=false react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .js,.jsx",
+    "check-imports": "madge --circular --extensions js,jsx src/",
+    "check": "npm run typecheck && npm run lint && npm run check-imports",
+    "prebuild": "npm run check"
   },
   "dependencies": {
     "@material-ui/core": "^4.12.4",
@@ -27,7 +32,14 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "^14.4.3",
-    "ajv": "^8.17.1"
+    "@types/react": "^19.0.12",
+    "@types/react-dom": "^19.0.4",
+    "ajv": "^8.17.1",
+    "eslint": "^9.22.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-react": "^7.37.4",
+    "madge": "^8.0.0",
+    "typescript": "^5.8.2"
   },
   "browserslist": {
     "production": [
