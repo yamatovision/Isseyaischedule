@@ -1,8 +1,8 @@
 {
   "framework": "create-react-app",
-  "buildCommand": "CI=false SKIP_PREFLIGHT_CHECK=true npm run build",
+  "buildCommand": "npm ci && CI=false SKIP_PREFLIGHT_CHECK=true npm run build",
   "outputDirectory": "build",
-  "installCommand": "npm install --legacy-peer-deps && npm uninstall @craco/craco --no-save",
+  "installCommand": "npm ci --omit=dev",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ],
