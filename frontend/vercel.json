@@ -1,5 +1,6 @@
 {
-  "buildCommand": "DISABLE_ESLINT_PLUGIN=true CI=false NODE_ENV=production react-scripts build",
+  "framework": "create-react-app",
+  "buildCommand": "CI=false npm run build",
   "outputDirectory": "build",
   "installCommand": "npm install --legacy-peer-deps",
   "rewrites": [
