@@ -47,7 +47,7 @@ app.use(`${API_BASE_PATH}/tasks`, taskRoutes);
 app.use(`${API_BASE_PATH}/chat`, chatRoutes);
 
 // ヘルスチェックエンドポイント
-app.get('/health', (req, res) => {
+app.get(`${API_BASE_PATH}/health`, (req, res) => {
   res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
