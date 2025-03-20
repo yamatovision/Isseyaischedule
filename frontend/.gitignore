@@ -1,0 +1,40 @@
+# 依存関係
+/node_modules
+/.pnp
+.pnp.js
+
+# ビルド
+/build
+/dist
+/.next
+/out
+
+# 環境変数
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# ログ
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# エディタ関連
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# OS関連
+.DS_Store
+Thumbs.db
+
+# テスト関連
+/coverage
+
+# その他
+.vercel
+*.log
+*.gz
