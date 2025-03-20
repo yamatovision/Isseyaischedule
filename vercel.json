@@ -1,11 +1,21 @@
 {
-  "buildCommand": "CI=false npm run build",
+  "buildCommand": "cd frontend && DISABLE_ESLINT_PLUGIN=true CI=false NODE_ENV=production node ./node_modules/@craco/craco/dist/bin/craco.js build",
   "outputDirectory": "build",
   "installCommand": "npm install --legacy-peer-deps",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "env": {
-    "REACT_APP_API_URL": "https://isseyaischedule-production.up.railway.app/api/v1"
+    "REACT_APP_API_URL": "https://isseyaischedule-production.up.railway.app/api/v1",
+    "REACT_APP_VERSION": "0.1.0",
+    "REACT_APP_DEFAULT_PROJECT_VIEW": "week",
+    "REACT_APP_ENABLE_ANALYTICS": "false",
+    "REACT_APP_RESOURCE_CHECK_ENABLED": "true",
+    "REACT_APP_RELATED_PROJECTS_MAX": "5",
+    "REACT_APP_AUTH_TOKEN_NAME": "schedle_auth_token",
+    "REACT_APP_AUTH_TOKEN_EXPIRY": "86400",
+    "REACT_APP_AUTH_COOKIE_NAME": "schedle_auth",
+    "REACT_APP_STORAGE_PREFIX": "schedle_",
+    "REACT_APP_WEBSOCKET_URL": "wss://isseyaischedule-production.up.railway.app/ws"
   }
 }

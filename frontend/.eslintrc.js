@@ -22,6 +22,7 @@ module.exports = {
     "import"
   ],
   rules: {
+    // 拡張子は必須にしない（React標準の動作に合わせる）
     "import/extensions": ["error", "never", {
       "css": "always",
       "svg": "always",
@@ -33,6 +34,12 @@ module.exports = {
   settings: {
     react: {
       version: "detect"
+    },
+    // インポート解決の設定
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx"]
+      }
     }
   }
 }
