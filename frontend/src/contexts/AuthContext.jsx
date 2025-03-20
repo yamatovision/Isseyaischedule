@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { getToken, setToken, removeToken } from '../utils/auth';
+import { getToken, setToken, removeToken } from '../utils/auth.js';
 
 // API呼び出しをインポート
 import { login, register, logout, getProfile } from '../api/authApi';
