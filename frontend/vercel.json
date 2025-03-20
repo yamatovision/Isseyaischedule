@@ -2,9 +2,9 @@
   "framework": "create-react-app",
   "buildCommand": "find . -name 'jsconfig.json' -delete && npm ci && CI=false SKIP_PREFLIGHT_CHECK=true npm run build",
   "outputDirectory": "build",
-  "installCommand": "npm ci --omit=dev",
+  "installCommand": "npm ci",
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/(.*)", "destination": "/" }
   ],
   "env": {
     "REACT_APP_API_URL": "https://isseyaischedule-production.up.railway.app/api/v1",
